@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { View, Text, Input, Image, Picker, ScrollView } from '@tarojs/components';
+import { View, Text, Image, Picker, ScrollView } from '@tarojs/components';
+import { Input } from '@/components/ui/input';
 import Taro, { useLoad } from '@tarojs/taro';
 import { useTheme } from '@/utils/theme';
 import { useGlobalStore } from '@/stores/global';
@@ -256,14 +257,19 @@ export default function OnboardingPage() {
             <Text className="text-sm mb-2" style={{ color: colors.textMuted }}>
               孩子昵称
             </Text>
-            <Input
-              className="rounded-2xl px-4 py-3"
-              style={{ backgroundColor: colors.card, color: colors.text }}
-              value={name}
-              onInput={(e) => setName(e.detail.value)}
-              placeholder="请输入昵称"
-              placeholderStyle={`color:${colors.textMuted}`}
-            />
+            <View
+              className="rounded-2xl px-4"
+              style={{ backgroundColor: colors.card, borderWidth: '2rpx', borderColor: colors.border }}
+            >
+              <Input
+                className="w-full bg-transparent px-0"
+                style={{ color: colors.text }}
+                value={name}
+                onInput={(e) => setName(e.detail.value)}
+                placeholder="请输入昵称"
+                placeholderStyle={`color:${colors.textMuted}`}
+              />
+            </View>
           </View>
           <View className="mb-2">
             <Text className="text-sm mb-2" style={{ color: colors.textMuted }}>
@@ -350,14 +356,19 @@ export default function OnboardingPage() {
               style={{ backgroundColor: colors.card, borderWidth: '2rpx', borderColor: colors.border }}
             >
               <View className="flex flex-row items-center mb-2">
-                <Input
+                <View
                   className="flex-1 rounded-xl px-3 py-2 mr-2"
-                  style={{ backgroundColor: colors.bg, color: colors.text }}
-                  value={task.name}
-                  onInput={(e) => updateTask(idx, { name: e.detail.value })}
-                  placeholder="任务名称"
-                  placeholderStyle={`color:${colors.textMuted}`}
-                />
+                  style={{ backgroundColor: colors.bg }}
+                >
+                  <Input
+                    className="w-full bg-transparent px-0"
+                    style={{ color: colors.text }}
+                    value={task.name}
+                    onInput={(e) => updateTask(idx, { name: e.detail.value })}
+                    placeholder="任务名称"
+                    placeholderStyle={`color:${colors.textMuted}`}
+                  />
+                </View>
                 <View
                   className="px-3 py-2 rounded-xl active:scale-95"
                   style={{ backgroundColor: colors.danger }}
@@ -368,29 +379,44 @@ export default function OnboardingPage() {
                   </Text>
                 </View>
               </View>
-              <Input
+              <View
                 className="rounded-xl px-3 py-2 mb-2"
-                style={{ backgroundColor: colors.bg, color: colors.text }}
-                value={task.detail}
-                onInput={(e) => updateTask(idx, { detail: e.detail.value })}
-                placeholder="默认详情"
-                placeholderStyle={`color:${colors.textMuted}`}
-              />
-              <View className="flex flex-row items-center">
+                style={{ backgroundColor: colors.bg }}
+              >
                 <Input
-                  className="w-16 rounded-xl px-3 py-2 mr-2 text-center"
-                  style={{ backgroundColor: colors.bg, color: colors.text }}
-                  value={task.icon}
-                  onInput={(e) => updateTask(idx, { icon: e.detail.value })}
-                />
-                <Input
-                  className="flex-1 rounded-xl px-3 py-2 mr-2"
-                  style={{ backgroundColor: colors.bg, color: colors.text }}
-                  value={task.color}
-                  onInput={(e) => updateTask(idx, { color: e.detail.value })}
-                  placeholder="颜色 #HEX"
+                  className="w-full bg-transparent px-0"
+                  style={{ color: colors.text }}
+                  value={task.detail}
+                  onInput={(e) => updateTask(idx, { detail: e.detail.value })}
+                  placeholder="默认详情"
                   placeholderStyle={`color:${colors.textMuted}`}
                 />
+              </View>
+              <View className="flex flex-row items-center">
+                <View
+                  className="w-16 rounded-xl px-3 py-2 mr-2"
+                  style={{ backgroundColor: colors.bg }}
+                >
+                  <Input
+                    className="w-full bg-transparent px-0 text-center"
+                    style={{ color: colors.text }}
+                    value={task.icon}
+                    onInput={(e) => updateTask(idx, { icon: e.detail.value })}
+                  />
+                </View>
+                <View
+                  className="flex-1 rounded-xl px-3 py-2 mr-2"
+                  style={{ backgroundColor: colors.bg }}
+                >
+                  <Input
+                    className="w-full bg-transparent px-0"
+                    style={{ color: colors.text }}
+                    value={task.color}
+                    onInput={(e) => updateTask(idx, { color: e.detail.value })}
+                    placeholder="颜色 #HEX"
+                    placeholderStyle={`color:${colors.textMuted}`}
+                  />
+                </View>
                 <View
                   className="w-10 h-10 rounded-xl"
                   style={{ backgroundColor: task.color }}

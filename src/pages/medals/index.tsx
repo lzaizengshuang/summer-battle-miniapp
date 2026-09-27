@@ -1,5 +1,5 @@
 import { View, Text, ScrollView } from '@tarojs/components';
-import Taro, { useLoad } from '@tarojs/taro';
+import Taro, { useLoad, useShareAppMessage } from '@tarojs/taro';
 import { useTheme } from '@/utils/theme';
 import { useGlobalStore } from '@/stores/global';
 import { MedalGrid } from '@/components/MedalGrid';
@@ -46,6 +46,13 @@ export default function MedalsPage() {
       showError(err);
     }
   };
+
+  useShareAppMessage(() => ({
+    title: profile
+      ? `${profile.name}已解锁 ${progress?.medals.length || 0} 枚勋章，快来围观！`
+      : '孩子假期打卡神器，坚持就有勋章',
+    path: '/pages/index/index',
+  }));
 
   if (!progress) {
     return (

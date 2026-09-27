@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { View, Text, ScrollView, Image } from '@tarojs/components';
-import Taro, { useLoad, usePullDownRefresh } from '@tarojs/taro';
+import Taro, { useLoad, usePullDownRefresh, useShareAppMessage } from '@tarojs/taro';
 import { Flame, Zap } from 'lucide-react-taro';
 import { useTheme } from '@/utils/theme';
 import { useGlobalStore } from '@/stores/global';
@@ -45,6 +45,13 @@ export default function IndexPage() {
     check();
   });
 
+  useShareAppMessage(() => ({
+    title: profile
+      ? `${profile.name}的${plan?.name || '假期作战'}：已连续打卡 ${progress?.currentConsecutiveDays || 0} 天，快来一起坚持！`
+      : '孩子假期打卡神器，坚持就有勋章',
+    path: '/pages/index/index',
+  }));
+
   useEffect(() => {
     if (plan && profile) loadSchedule();
   }, [date, plan, profile]);
@@ -83,6 +90,8 @@ export default function IndexPage() {
         date,
         taskId,
         completed,
+        startTime: completed && startTime ? startTime.toISOString() : null,
+        endTime: completed ? new Date().toISOString() : null,
       });
       setProgress(updatedProgress);
       setSchedule((prev) =>

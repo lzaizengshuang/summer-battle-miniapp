@@ -1,5 +1,5 @@
 import { View, Text, Image, ScrollView } from '@tarojs/components';
-import Taro, { useLoad } from '@tarojs/taro';
+import Taro, { useLoad, useShareAppMessage } from '@tarojs/taro';
 import { useTheme } from '@/utils/theme';
 import { useGlobalStore } from '@/stores/global';
 import { rankEmblems } from '@/config/theme';
@@ -33,6 +33,13 @@ export default function RanksPage() {
     };
     check();
   });
+
+  useShareAppMessage(() => ({
+    title: profile
+      ? `${profile.name}已升到「${rankNames[(progress?.currentRank || 1) - 1] || ''}」，快来一起升级！`
+      : '孩子假期打卡神器，坚持就有勋章',
+    path: '/pages/index/index',
+  }));
 
   const loadRankInfo = async () => {
     if (!plan || !profile) return;

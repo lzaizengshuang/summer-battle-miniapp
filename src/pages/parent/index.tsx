@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { View, Text, Image, Picker, Textarea, ScrollView } from '@tarojs/components';
+import { View, Text, Image, Picker, ScrollView } from '@tarojs/components';
+import { Textarea } from '@/components/ui/textarea';
 import Taro, { useLoad } from '@tarojs/taro';
 import { useTheme } from '@/utils/theme';
 import { useGlobalStore } from '@/stores/global';
@@ -517,25 +518,35 @@ export default function ParentPage() {
         </Text>
       </View>
       {backupJson ? (
-        <Textarea
-          className="rounded-2xl p-3 text-xs mb-6"
-          style={{ backgroundColor: colors.card, color: colors.text, height: '240rpx' }}
-          value={backupJson}
-          disabled
-        />
+        <View
+          className="rounded-2xl p-3 mb-6"
+          style={{ backgroundColor: colors.card, borderWidth: '2rpx', borderColor: colors.border, height: '240rpx' }}
+        >
+          <Textarea
+            className="w-full h-full bg-transparent text-xs"
+            style={{ color: colors.text }}
+            value={backupJson}
+            disabled
+          />
+        </View>
       ) : null}
 
       <Text className="text-lg font-bold mb-2" style={{ color: colors.text }}>
         导入备份
       </Text>
-      <Textarea
-        className="rounded-2xl p-3 text-xs mb-3"
-        style={{ backgroundColor: colors.card, color: colors.text, height: '240rpx' }}
-        value={restoreJson}
-        onInput={(e) => setRestoreJson(e.detail.value)}
-        placeholder="粘贴备份 JSON"
-        placeholderStyle={`color:${colors.textMuted}`}
-      />
+      <View
+        className="rounded-2xl p-3 mb-3"
+        style={{ backgroundColor: colors.card, borderWidth: '2rpx', borderColor: colors.border, height: '240rpx' }}
+      >
+        <Textarea
+          className="w-full h-full bg-transparent text-xs"
+          style={{ color: colors.text }}
+          value={restoreJson}
+          onInput={(e) => setRestoreJson(e.detail.value)}
+          placeholder="粘贴备份 JSON"
+          placeholderStyle={`color:${colors.textMuted}`}
+        />
+      </View>
       <Picker
         mode="selector"
         range={['合并', '覆盖']}

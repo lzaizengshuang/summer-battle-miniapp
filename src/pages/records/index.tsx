@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
-import { View, Text, ScrollView } from '@tarojs/components';
-import Taro, { useLoad } from '@tarojs/taro';
+import { View, Text, ScrollView, Image } from '@tarojs/components';
+import Taro, { useLoad, useShareAppMessage } from '@tarojs/taro';
+import { ChevronLeft, ChevronRight, CircleCheck, Circle } from 'lucide-react-taro';
 import { useTheme } from '@/utils/theme';
 import { useGlobalStore } from '@/stores/global';
 import { Calendar } from '@/components/Calendar';
@@ -36,6 +37,13 @@ export default function RecordsPage() {
     };
     check();
   });
+
+  useShareAppMessage(() => ({
+    title: profile
+      ? `${profile.name}的假期打卡战绩，坚持就是胜利！`
+      : '孩子假期打卡神器，坚持就有勋章',
+    path: '/pages/index/index',
+  }));
 
   useEffect(() => {
     if (!profile || !plan) return;
@@ -89,6 +97,15 @@ export default function RecordsPage() {
   const selectedRecord = records.find((r) => r.date === selectedDate);
   const dayType: DayType = plan.dayTypes[selectedDate] || 'learn';
 
+  const fmtDuration = (tr: DayRecord['taskRecords'][number]) => {
+    if (!tr.startTime || !tr.endTime) return null;
+    const mins = Math.max(
+      1,
+      Math.round((new Date(tr.endTime).getTime() - new Date(tr.startTime).getTime()) / 60000),
+    );
+    return mins < 60 ? `${mins} 分钟` : `${Math.floor(mins / 60)} 小时 ${mins % 60} 分`;
+  };
+
   const legend = [
     { color: colors.success, label: '已完成' },
     { color: colors.gold, label: '部分完成' },
@@ -98,35 +115,39 @@ export default function RecordsPage() {
   ];
 
   return (
-    <ScrollView
-      className="min-h-full px-4 py-4"
-      style={{ backgroundColor: colors.bg }}
-      scrollY
-    >
+    <View className="min-h-full" style={{ backgroundColor: colors.bg }}>
+      {colors.bgImage ? (
+        <Image
+          src={colors.bgImage}
+          mode="aspectFill"
+          style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, zIndex: 0, opacity: 0.5 }}
+        />
+      ) : null}
+      <ScrollView
+        className="min-h-full px-4 py-4"
+        style={{ position: 'relative', zIndex: 1 }}
+        scrollY
+      >
       <View
         className="flex flex-row items-center justify-between rounded-3xl px-4 py-4 mb-4"
         style={{ backgroundColor: colors.card, borderWidth: '2rpx', borderColor: colors.border }}
       >
         <View
-          className="w-14 h-14 rounded-2xl flex items-center justify-center active:scale-95 transition-transform"
-          style={{ backgroundColor: colors.primary }}
+          className="w-12 h-12 rounded-2xl flex items-center justify-center active:scale-95 transition-transform"
+          style={{ backgroundColor: colors.glass || colors.card, borderWidth: '2rpx', borderColor: colors.border }}
           onClick={prevMonth}
         >
-          <Text className="text-2xl font-bold" style={{ color: colors.bg }}>
-            ◀
-          </Text>
+          <ChevronLeft size={30} color={colors.text} />
         </View>
         <Text className="text-xl font-bold" style={{ color: colors.text }}>
           {year}年{month.toString().padStart(2, '0')}月
         </Text>
         <View
-          className="w-14 h-14 rounded-2xl flex items-center justify-center active:scale-95 transition-transform"
-          style={{ backgroundColor: colors.primary }}
+          className="w-12 h-12 rounded-2xl flex items-center justify-center active:scale-95 transition-transform"
+          style={{ backgroundColor: colors.glass || colors.card, borderWidth: '2rpx', borderColor: colors.border }}
           onClick={nextMonth}
         >
-          <Text className="text-2xl font-bold" style={{ color: colors.bg }}>
-            ▶
-          </Text>
+          <ChevronRight size={30} color={colors.text} />
         </View>
       </View>
 
@@ -151,15 +172,30 @@ export default function RecordsPage() {
           <>
             {selectedRecord.taskRecords.map((tr) => {
               const task = plan.tasks.find((t) => t.id === tr.taskId);
+              const duration = fmtDuration(tr);
               return (
                 <View key={tr.taskId} className="flex flex-row items-center justify-between py-2">
-                  <Text style={{ color: colors.text }}>{task?.name || tr.taskId}</Text>
-                  <Text
-                    className="text-sm font-bold"
-                    style={{ color: tr.completed ? colors.success : colors.textMuted }}
-                  >
-                    {tr.completed ? '✓ 完成' : '○ 未完成'}
-                  </Text>
+                  <View className="flex flex-row items-center">
+                    <View
+                      className="w-9 h-9 rounded-xl flex items-center justify-center text-lg mr-3"
+                      style={{ backgroundColor: `${task?.color || '#888888'}26` }}
+                    >
+                      <Text>{task?.icon || '📝'}</Text>
+                    </View>
+                    <View>
+                      <Text style={{ color: colors.text }}>{task?.name || tr.taskId}</Text>
+                      {duration ? (
+                        <Text className="text-xs mt-1" style={{ color: colors.textMuted }}>
+                          用时 {duration}
+                        </Text>
+                      ) : null}
+                    </View>
+                  </View>
+                  {tr.completed ? (
+                    <CircleCheck size={26} color={colors.success} />
+                  ) : (
+                    <Circle size={26} color={colors.textMuted} />
+                  )}
                 </View>
               );
             })}
@@ -196,6 +232,7 @@ export default function RecordsPage() {
           </View>
         ))}
       </View>
-    </ScrollView>
+      </ScrollView>
+    </View>
   );
 }

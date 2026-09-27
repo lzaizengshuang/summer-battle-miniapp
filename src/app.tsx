@@ -2,11 +2,11 @@ import { PropsWithChildren, useEffect } from 'react';
 import { useLaunch } from '@tarojs/taro';
 import '@/app.css';
 import { Toaster } from '@/components/ui/toast';
-import { Preset } from './presets';
 import { ThemeProvider } from '@/utils/theme';
 import { useGlobalStore } from '@/stores/global';
 import { callCloud, initCloud, showError } from '@/utils/cloud';
 import type { ChildProfile, Plan, UserProgress } from '@/types';
+import { Preset } from './presets';
 
 const Bootstrap = ({ children }: PropsWithChildren) => {
   const setProfile = useGlobalStore((s) => s.setProfile);
