@@ -39,7 +39,10 @@ pnpm-debug.log*
 .DS_Store
 
 # Key
-# key/
+key/
+private.appid.key
+project.private.config.json
+.env.local
 .codegraph/
 .cozeproj/reduction
 .preview

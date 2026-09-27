@@ -11,6 +11,7 @@ import {
   isBefore,
   isSameDay,
 } from 'date-fns';
+import { zhCN } from 'date-fns/locale';
 
 export const toISODate = (date: Date): string => format(date, 'yyyy-MM-dd');
 
@@ -18,7 +19,7 @@ export const parseDate = (date: string | Date): Date =>
   typeof date === 'string' ? parseISO(date) : date;
 
 export const formatDateCN = (date: string | Date): string =>
-  format(parseDate(date), 'MM月dd日 EEEE');
+  format(parseDate(date), 'MM月dd日 EEEE', { locale: zhCN });
 
 export const formatMonthCN = (year: number, month: number): string =>
   format(new Date(year, month - 1), 'yyyy年MM月');
@@ -50,7 +51,7 @@ export const getCalendarDays = (year: number, month: number): string[] => {
 export const getTodayISO = (): string => toISODate(new Date());
 
 export const getWeekdayName = (date: string | Date): string =>
-  format(parseDate(date), 'EEE');
+  format(parseDate(date), 'EEE', { locale: zhCN });
 
 export const getDaysBetween = (start: string, end: string): number => {
   const s = parseISO(start);

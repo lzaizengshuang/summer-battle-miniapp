@@ -1,0 +1,9 @@
+{
+  "name": "deletePlan",
+  "version": "1.0.0",
+  "description": "Delete a plan along with its records and progress",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "latest"
+  }
+}

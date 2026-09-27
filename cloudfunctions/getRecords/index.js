@@ -3,7 +3,6 @@ const { success, fail, getOpenId } = require('./utils');
 
 cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV });
 const db = cloud.database();
-const _ = db.command;
 
 exports.main = async (event, context) => {
   try {
@@ -22,7 +21,7 @@ exports.main = async (event, context) => {
         _openid: openid,
         childId,
         planId,
-        date: _.regex({ regexp: `^${prefix}` })
+        date: db.RegExp({ regexp: `^${prefix}` })
       })
       .orderBy('date', 'asc')
       .get();
