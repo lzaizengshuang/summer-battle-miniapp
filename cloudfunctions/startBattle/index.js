@@ -1,5 +1,5 @@
 const cloud = require('wx-server-sdk');
-const { initCloud, getOpenId, success, fail, isValidDate, sanitizeRecordForOutput } = require('../utils');
+const { initCloud, getOpenId, success, fail, isValidDate, sanitizeRecordForOutput } = require('./utils');
 
 exports.main = async (event, context) => {
   const db = initCloud();

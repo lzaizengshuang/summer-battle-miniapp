@@ -1,7 +1,7 @@
 const cloud = require('wx-server-sdk');
 const {
   success, fail, getOpenId, isValidDate, getDayTasks, getDayType
-} = require('../utils');
+} = require('./utils');
 
 cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV });
 const db = cloud.database();

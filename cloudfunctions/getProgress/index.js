@@ -1,5 +1,5 @@
 const cloud = require('wx-server-sdk');
-const { success, fail, getOpenId, getRankFromPoints } = require('../utils');
+const { success, fail, getOpenId, getRankFromPoints } = require('./utils');
 
 cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV });
 const db = cloud.database();
