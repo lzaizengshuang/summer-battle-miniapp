@@ -1,0 +1,9 @@
+{
+  "name": "updatePlan",
+  "version": "1.0.0",
+  "description": "Update plan and recalculate progress",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "latest"
+  }
+}

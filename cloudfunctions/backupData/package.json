@@ -1,0 +1,9 @@
+{
+  "name": "backupData",
+  "version": "1.0.0",
+  "description": "Backup child data to JSON",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "latest"
+  }
+}

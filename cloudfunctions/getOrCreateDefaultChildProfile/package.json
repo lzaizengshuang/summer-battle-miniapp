@@ -1,0 +1,9 @@
+{
+  "name": "getOrCreateDefaultChildProfile",
+  "version": "1.0.0",
+  "description": "Get or create default child profile",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "latest"
+  }
+}

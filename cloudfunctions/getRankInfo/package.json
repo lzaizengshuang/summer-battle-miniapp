@@ -1,0 +1,9 @@
+{
+  "name": "getRankInfo",
+  "version": "1.0.0",
+  "description": "Get rank thresholds and next rank points",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "latest"
+  }
+}

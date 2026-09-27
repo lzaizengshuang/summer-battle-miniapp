@@ -1,0 +1,9 @@
+{
+  "name": "toggleTask",
+  "version": "1.0.0",
+  "description": "Toggle task completion status",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "latest"
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "name": "startBattle",
+  "version": "1.0.0",
+  "description": "记录开始作战时间",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "latest"
+  }
+}

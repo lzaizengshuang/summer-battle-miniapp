@@ -1,0 +1,9 @@
+{
+  "name": "createPlan",
+  "version": "1.0.0",
+  "description": "Create a battle plan for child",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "latest"
+  }
+}

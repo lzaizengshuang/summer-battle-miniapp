@@ -1,0 +1,9 @@
+{
+  "name": "getRecords",
+  "version": "1.0.0",
+  "description": "Get day records for a specific month",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "latest"
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "name": "getProgress",
+  "version": "1.0.0",
+  "description": "Get user progress, rank info and medals",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "latest"
+  }
+}

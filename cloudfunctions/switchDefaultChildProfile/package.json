@@ -1,0 +1,9 @@
+{
+  "name": "switchDefaultChildProfile",
+  "version": "1.0.0",
+  "description": "Switch default child profile",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "latest"
+  }
+}

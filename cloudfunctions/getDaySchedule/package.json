@@ -1,0 +1,9 @@
+{
+  "name": "getDaySchedule",
+  "version": "1.0.0",
+  "description": "Get schedule for a specific day",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "latest"
+  }
+}

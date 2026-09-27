@@ -1,0 +1,9 @@
+{
+  "name": "init-db",
+  "version": "1.0.0",
+  "description": "Initialize WeChat Cloud database collections and indexes",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "latest"
+  }
+}

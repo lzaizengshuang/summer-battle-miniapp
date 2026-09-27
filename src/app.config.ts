@@ -1,11 +1,48 @@
 export default defineAppConfig({
   pages: [
-    'pages/index/index'
+    'pages/index/index',
+    'pages/ranks/index',
+    'pages/medals/index',
+    'pages/records/index',
+    'pages/onboarding/index',
+    'pages/parent/index',
   ],
+  tabBar: {
+    color: '#888888',
+    selectedColor: '#7ED321',
+    backgroundColor: '#141414',
+    borderStyle: 'black',
+    list: [
+      {
+        pagePath: 'pages/index/index',
+        text: '作战',
+        iconPath: 'assets/tabbar/home.png',
+        selectedIconPath: 'assets/tabbar/home-active.png',
+      },
+      {
+        pagePath: 'pages/ranks/index',
+        text: '等级',
+        iconPath: 'assets/tabbar/rank.png',
+        selectedIconPath: 'assets/tabbar/rank-active.png',
+      },
+      {
+        pagePath: 'pages/medals/index',
+        text: '勋章',
+        iconPath: 'assets/tabbar/medal.png',
+        selectedIconPath: 'assets/tabbar/medal-active.png',
+      },
+      {
+        pagePath: 'pages/records/index',
+        text: '记录',
+        iconPath: 'assets/tabbar/record.png',
+        selectedIconPath: 'assets/tabbar/record-active.png',
+      },
+    ],
+  },
   window: {
     backgroundTextStyle: 'light',
-    navigationBarBackgroundColor: '#fff',
-    navigationBarTitleText: 'WeChat',
-    navigationBarTextStyle: 'black'
-  }
-})
+    navigationBarBackgroundColor: '#0A0A0A',
+    navigationBarTitleText: '特种兵暑假作战',
+    navigationBarTextStyle: 'white',
+  },
+});

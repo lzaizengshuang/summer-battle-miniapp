@@ -1,0 +1,9 @@
+{
+  "name": "getCurrentPlan",
+  "version": "1.0.0",
+  "description": "Get current plan and progress for child",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "latest"
+  }
+}

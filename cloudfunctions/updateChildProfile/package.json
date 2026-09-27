@@ -1,0 +1,9 @@
+{
+  "name": "updateChildProfile",
+  "version": "1.0.0",
+  "description": "更新孩子档案信息",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "latest"
+  }
+}

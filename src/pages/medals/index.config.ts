@@ -1,0 +1,4 @@
+export default definePageConfig({
+  navigationBarTitleText: '荣誉墙',
+  backgroundColor: '#0A0A0A',
+});
