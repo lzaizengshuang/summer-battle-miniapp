@@ -1,0 +1,551 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>特种兵暑假作战小程序 · 微信发布傻瓜式图文教程</title>
+  <style>
+    :root {
+      --bg: #f7f8fa;
+      --surface: #ffffff;
+      --text: #1a1a1a;
+      --text-secondary: #555555;
+      --text-muted: #888888;
+      --border: #e4e6eb;
+      --accent: #07c160;
+      --accent-dark: #06ad56;
+      --accent-ink: #ffffff;
+      --warn: #ff9500;
+      --warn-bg: #fff7e6;
+      --danger: #fa5151;
+      --danger-bg: #fff0f0;
+      --info: #10aeff;
+      --info-bg: #e6f6ff;
+      --radius: 12px;
+      --shadow: 0 2px 8px rgba(0,0,0,0.06);
+      --font: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+    }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    code {
+      font-family: var(--mono);
+      background: #f0f1f5;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.9em;
+    }
+    pre {
+      background: #1e1e1e;
+      color: #f0f0f0;
+      padding: 16px;
+      border-radius: var(--radius);
+      overflow-x: auto;
+      font-family: var(--mono);
+      font-size: 0.9em;
+    }
+    header {
+      background: linear-gradient(135deg, #07c160 0%, #05a350 100%);
+      color: white;
+      padding: 56px clamp(20px, 6vw, 80px) 48px;
+    }
+    header h1 {
+      margin: 0 0 16px;
+      font-size: clamp(1.8rem, 5vw, 2.6rem);
+      line-height: 1.25;
+    }
+    header p {
+      margin: 0;
+      font-size: 1.1rem;
+      opacity: 0.95;
+      max-width: 720px;
+    }
+    .wrap {
+      max-width: 880px;
+      margin: 0 auto;
+      padding: 32px clamp(16px, 4vw, 40px) 80px;
+    }
+    .toc {
+      background: var(--surface);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 24px;
+      margin-bottom: 32px;
+    }
+    .toc h2 {
+      margin: 0 0 16px;
+      font-size: 1.1rem;
+    }
+    .toc ol {
+      margin: 0;
+      padding-left: 22px;
+      columns: 2;
+      column-gap: 32px;
+    }
+    .toc li {
+      margin-bottom: 8px;
+      break-inside: avoid;
+    }
+    @media (max-width: 600px) {
+      .toc ol { columns: 1; }
+    }
+    .step {
+      background: var(--surface);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 28px;
+      margin-bottom: 24px;
+      scroll-margin-top: 20px;
+    }
+    .step-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+    .step-num {
+      flex-shrink: 0;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--accent);
+      color: var(--accent-ink);
+      display: grid;
+      place-items: center;
+      font-weight: 700;
+      font-size: 1.1rem;
+    }
+    .step h2 {
+      margin: 0;
+      font-size: 1.35rem;
+      line-height: 1.35;
+      padding-top: 6px;
+    }
+    .step h3 {
+      margin: 22px 0 10px;
+      font-size: 1.05rem;
+      color: var(--text-secondary);
+    }
+    .step p, .step li { color: var(--text-secondary); }
+    .step ul, .step ol { padding-left: 22px; }
+    .step li { margin-bottom: 8px; }
+    .box {
+      border-radius: 10px;
+      padding: 16px 18px;
+      margin: 16px 0;
+      border-left: 4px solid;
+    }
+    .box.warn { background: var(--warn-bg); border-color: var(--warn); }
+    .box.danger { background: var(--danger-bg); border-color: var(--danger); }
+    .box.info { background: var(--info-bg); border-color: var(--info); }
+    .box strong { color: var(--text); }
+    .box-title {
+      font-weight: 700;
+      margin-bottom: 6px;
+      color: var(--text);
+    }
+    .screen-desc {
+      background: #f7f8fa;
+      border: 1px dashed var(--border);
+      border-radius: 10px;
+      padding: 16px;
+      margin: 14px 0;
+    }
+    .screen-desc strong { color: var(--text); }
+    .kbd {
+      display: inline-block;
+      padding: 2px 8px;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-family: var(--mono);
+      font-size: 0.85em;
+      box-shadow: 0 1px 0 rgba(0,0,0,0.05);
+    }
+    .two-col {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 16px;
+      margin: 16px 0;
+    }
+    .card {
+      background: #fbfbfb;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px;
+    }
+    .card strong { color: var(--text); }
+    .flow {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      margin: 16px 0;
+    }
+    .flow span {
+      background: var(--accent);
+      color: white;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 0.9rem;
+    }
+    .flow i {
+      color: var(--text-muted);
+      font-style: normal;
+    }
+    footer {
+      text-align: center;
+      color: var(--text-muted);
+      padding: 40px 20px;
+      font-size: 0.9rem;
+    }
+    @media print {
+      header { background: #07c160; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .toc, .step { box-shadow: none; border: 1px solid var(--border); }
+      body { background: white; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>特种兵暑假作战小程序</h1>
+    <p>微信发布傻瓜式图文教程。从注册小程序账号到正式上线，每一步该点哪里、填什么、注意什么，都写清楚了。建议电脑端打开，对照操作。</p>
+  </header>
+
+  <main class="wrap">
+    <nav class="toc" aria-label="目录">
+      <h2>📋 目录</h2>
+      <ol>
+        <li><a href="#s0">先确认：你的账号类型</a></li>
+        <li><a href="#s1">注册普通小程序账号</a></li>
+        <li><a href="#s2">获取 AppID</a></li>
+        <li><a href="#s3">下载微信开发者工具</a></li>
+        <li><a href="#s4">下载项目源码</a></li>
+        <li><a href="#s5">导入项目</a></li>
+        <li><a href="#s6">开通微信云开发</a></li>
+        <li><a href="#s7">初始化数据库</a></li>
+        <li><a href="#s8">部署云函数</a></li>
+        <li><a href="#s9">真机预览测试</a></li>
+        <li><a href="#s10">上传代码</a></li>
+        <li><a href="#s11">提交审核</a></li>
+        <li><a href="#s12">发布上线</a></li>
+        <li><a href="#faq">常见问题</a></li>
+      </ol>
+    </nav>
+
+    <section class="step" id="s0">
+      <div class="step-header">
+        <div class="step-num">0</div>
+        <h2>先确认：你的账号类型对不对</h2>
+      </div>
+      <div class="box danger">
+        <div class="box-title">⚠️ 重要提醒</div>
+        <p>本项目是<strong>普通小程序</strong>，不是小游戏。如果你之前注册的是「小游戏」账号，导入时会报错 <code>dist/game.json</code> 找不到。小游戏账号改不成普通小程序，只能重新注册。</p>
+      </div>
+      <div class="two-col">
+        <div class="card">
+          <strong>✅ 普通小程序</strong><br>
+          后台左侧菜单：首页、管理、开发、功能、推广、统计<br>
+          服务类目有：教育、工具、生活服务等
+        </div>
+        <div class="card">
+          <strong>❌ 小游戏账号</strong><br>
+          后台左侧菜单：首页、小游戏、管理、开发、功能<br>
+          服务类目只有：休闲游戏、动作游戏等
+        </div>
+      </div>
+      <p>如果不确定，看后台左侧有没有「小游戏」三个字。有的话就是小游戏账号，请直接看步骤 1 重新注册。</p>
+    </section>
+
+    <section class="step" id="s1">
+      <div class="step-header">
+        <div class="step-num">1</div>
+        <h2>注册普通小程序账号</h2>
+      </div>
+      <ol>
+        <li>电脑浏览器打开 <a href="https://mp.weixin.qq.com" target="_blank" rel="noopener noreferrer">微信公众平台</a></li>
+        <li>点击页面右上角 <strong>立即注册</strong></li>
+        <li>选择 <strong>小程序</strong>（不要选小游戏）</li>
+        <li>填写一个<strong>未注册过微信公众平台的邮箱</strong>，设置密码，完成邮箱验证</li>
+        <li>选择主体类型。个人最简单但部分功能受限；企业/个体工商户功能最全但需营业执照；其他按实际选</li>
+        <li>填写主体信息，提交审核。个人通常很快通过</li>
+      </ol>
+      <div class="box warn">
+        <div class="box-title">💡 注意</div>
+        <p>一个邮箱只能注册一个小程序账号。如果你之前注册的是小游戏，必须换一个邮箱。</p>
+      </div>
+    </section>
+
+    <section class="step" id="s2">
+      <div class="step-header">
+        <div class="step-num">2</div>
+        <h2>获取 AppID</h2>
+      </div>
+      <p>审核通过后，登录公众平台后台：</p>
+      <ol>
+        <li>左侧菜单点击 <strong>开发</strong> → <strong>开发管理</strong></li>
+        <li>点击顶部 <strong>开发设置</strong></li>
+        <li>找到 <strong>AppID(小程序ID)</strong>，形如 <code>wx1234567890abcdef</code></li>
+        <li>复制这串字符，后面导入项目时要填</li>
+      </ol>
+      <div class="screen-desc">
+        <strong>你会看到的页面：</strong>开发设置页，有 AppID、AppSecret、服务器域名、扫普通链接二维码打开小程序 等模块。我们只需要 AppID。
+      </div>
+    </section>
+
+    <section class="step" id="s3">
+      <div class="step-header">
+        <div class="step-num">3</div>
+        <h2>下载并安装微信开发者工具</h2>
+      </div>
+      <ol>
+        <li>打开 <a href="https://developers.weixin.qq.com/miniprogram/dev/devtools/download.html" target="_blank" rel="noopener noreferrer">微信开发者工具下载页</a></li>
+        <li>根据你的系统下载稳定版（Windows 或 macOS）</li>
+        <li>下载后双击安装，一直点下一步即可</li>
+        <li>安装完成后打开，用微信扫码登录</li>
+      </ol>
+    </section>
+
+    <section class="step" id="s4">
+      <div class="step-header">
+        <div class="step-num">4</div>
+        <h2>下载项目源码</h2>
+      </div>
+      <ol>
+        <li>打开 GitHub 仓库：<a href="https://github.com/lzaizengshuang/summer-battle-miniapp" target="_blank" rel="noopener noreferrer">https://github.com/lzaizengshuang/summer-battle-miniapp</a></li>
+        <li>点击页面中间偏右的绿色按钮 <strong>&lt;&gt; Code</strong></li>
+        <li>选择 <strong>Download ZIP</strong></li>
+        <li>下载完成后，在电脑里解压，得到一个 <code>summer-battle-miniapp-main</code> 文件夹</li>
+      </ol>
+      <div class="box info">
+        <div class="box-title">📁 解压后文件夹里有什么</div>
+        <p>主要文件夹：<code>src/</code>（前端代码）、<code>cloudfunctions/</code>（后端云函数）、<code>dist/</code>（编译好的小程序文件）。</p>
+      </div>
+    </section>
+
+    <section class="step" id="s5">
+      <div class="step-header">
+        <div class="step-num">5</div>
+        <h2>导入项目到微信开发者工具</h2>
+      </div>
+      <ol>
+        <li>打开微信开发者工具</li>
+        <li>点击 <strong>导入项目</strong>（如果没有，点左上角菜单 项目 → 导入项目）</li>
+        <li>在弹窗里，选择解压后的 <code>summer-battle-miniapp-main</code> 文件夹</li>
+        <li><strong>AppID</strong> 处粘贴步骤 2 复制的 AppID</li>
+        <li><strong>后端服务</strong> 选择 <strong>微信云开发</strong></li>
+        <li>点击 <strong>导入</strong></li>
+      </ol>
+      <div class="screen-desc">
+        <strong>导入成功后会看到：</strong>左侧文件树有 <code>cloudfunctions</code>、<code>config</code>、<code>src</code> 等文件夹；中间是小程序模拟器；右侧是调试器。如果显示首页内容，说明导入成功。
+      </div>
+      <div class="box danger">
+        <div class="box-title">🚨 如果报错 <code>dist/game.json</code> 找不到</div>
+        <p>说明你用的是<strong>小游戏账号</strong>，必须重新注册普通小程序（回看步骤 0 和步骤 1）。</p>
+      </div>
+    </section>
+
+    <section class="step" id="s6">
+      <div class="step-header">
+        <div class="step-num">6</div>
+        <h2>开通微信云开发</h2>
+      </div>
+      <p>本项目数据存在微信云开发里，必须先开通。</p>
+      <ol>
+        <li>在开发者工具顶部工具栏，点击 <strong>云开发</strong> 按钮</li>
+        <li>按提示开通，选择一个离你近的节点</li>
+        <li>开通后进入云开发控制台</li>
+        <li>点击顶部 <strong>设置</strong> → <strong>环境设置</strong>，复制 <strong>环境 ID</strong>（形如 <code>xxx-xxx</code>）</li>
+      </ol>
+      <div class="box info">
+        <div class="box-title">📝 可选：配置环境 ID</div>
+        <p>如果项目没有自动绑定环境，打开 <code>src/utils/cloud.ts</code>，把环境 ID 填进去：</p>
+        <pre>wx.cloud.init({
+  env: '你的环境ID',
+  traceUser: true,
+});</pre>
+      </div>
+    </section>
+
+    <section class="step" id="s7">
+      <div class="step-header">
+        <div class="step-num">7</div>
+        <h2>初始化数据库</h2>
+      </div>
+      <p>需要创建 4 个数据集合。</p>
+      <ol>
+        <li>在云开发控制台，点击左侧 <strong>数据库</strong></li>
+        <li>点击 <strong>添加集合</strong> 或 <strong>+</strong></li>
+        <li>依次创建 4 个集合：<code>childProfiles</code>、<code>plans</code>、<code>records</code>、<code>progress</code></li>
+        <li>每个集合创建后，点击 <strong>权限设置</strong></li>
+        <li>选择 <strong>仅创建者可读写</strong>（保护孩子数据）</li>
+      </ol>
+      <div class="box info">
+        <div class="box-title">🤖 另一种方式：用云函数初始化</div>
+        <p>部署完 <code>init-db</code> 云函数后（见步骤 8），在开发者工具控制台执行：</p>
+        <pre>wx.cloud.callFunction({ name: 'init-db' }).then(console.log)</pre>
+        <p>返回 <code>success: true</code> 即表示集合和索引已创建。</p>
+      </div>
+    </section>
+
+    <section class="step" id="s8">
+      <div class="step-header">
+        <div class="step-num">8</div>
+        <h2>部署云函数</h2>
+      </div>
+      <p>本项目有 18 个云函数，需要逐个上传到云端。</p>
+      <ol>
+        <li>在开发者工具左侧文件树，展开 <code>cloudfunctions/</code></li>
+        <li>右键点击第一个云函数目录，例如 <code>init-db</code></li>
+        <li>选择 <strong>创建并部署：云端安装依赖</strong>（如果没有，选 <strong>上传并部署：云端安装依赖</strong>）</li>
+        <li>等待提示部署成功</li>
+        <li>对其余每个云函数目录重复上述操作</li>
+      </ol>
+      <div class="two-col">
+        <div class="card">
+          <strong>必须部署的云函数</strong><br>
+          init-db、getOrCreateDefaultChildProfile、createChildProfile、listChildProfiles、switchDefaultChildProfile、updateChildProfile、createPlan、getCurrentPlan、updatePlan、getDaySchedule
+        </div>
+        <div class="card">
+          <strong>继续部署</strong><br>
+          startBattle、toggleTask、reportDay、getProgress、getRankInfo、getRecords、backupData、restoreData
+        </div>
+      </div>
+      <div class="box warn">
+        <div class="box-title">💡 检查是否成功</div>
+        <p>进入云开发控制台 → <strong>云函数</strong>，应该能看到 18 个函数列表。如果某个失败，右键重新部署。</p>
+      </div>
+    </section>
+
+    <section class="step" id="s9">
+      <div class="step-header">
+        <div class="step-num">9</div>
+        <h2>真机预览测试</h2>
+      </div>
+      <ol>
+        <li>在开发者工具顶部点击 <strong>预览</strong></li>
+        <li>会生成一个二维码</li>
+        <li>用微信扫码，在手机上打开小程序</li>
+        <li>按流程测试：首次进入创建向导 → 选王子/公主主题 → 设假期起止日期 → 添加任务 → 完成任务并汇报 → 查看等级、勋章、记录 → 长按等级徽章 3 秒进家长后台</li>
+      </ol>
+      <div class="box warn">
+        <div class="box-title">🔧 如果测试报错</div>
+        <p>打开手机上的 <strong>vConsole</strong>（右上角 ⋮ 菜单里开启），把红色错误截图发给开发者。</p>
+      </div>
+    </section>
+
+    <section class="step" id="s10">
+      <div class="step-header">
+        <div class="step-num">10</div>
+        <h2>上传代码</h2>
+      </div>
+      <ol>
+        <li>确认预览没问题后，点击开发者工具顶部 <strong>上传</strong></li>
+        <li>填写版本号，例如 <code>1.0.0</code></li>
+        <li>填写项目备注，例如 <code>首次发布</code></li>
+        <li>点击 <strong>上传</strong></li>
+      </ol>
+      <div class="screen-desc">
+        <strong>上传成功后：</strong>登录公众平台 → <strong>管理</strong> → <strong>版本管理</strong> → 在 <strong>开发版本</strong> 里能看到刚上传的版本。
+      </div>
+    </section>
+
+    <section class="step" id="s11">
+      <div class="step-header">
+        <div class="step-num">11</div>
+        <h2>提交审核</h2>
+      </div>
+      <ol>
+        <li>在公众平台 → <strong>版本管理</strong> → 找到开发版本</li>
+        <li>点击右侧 <strong>提交审核</strong></li>
+        <li>按提示填写：功能页面选首页；服务类目选教育或工具相关；测试账号一般不需要；备注可写「儿童假期作业打卡工具，支持任务管理、等级勋章」</li>
+        <li>勾选《微信小程序平台审核规则》</li>
+        <li>点击 <strong>提交审核</strong></li>
+      </ol>
+      <div class="box info">
+        <div class="box-title">⏱ 审核时间</div>
+        <p>通常 1-7 个工作日。审核结果会发通知到管理员微信。</p>
+      </div>
+    </section>
+
+    <section class="step" id="s12">
+      <div class="step-header">
+        <div class="step-num">12</div>
+        <h2>发布上线</h2>
+      </div>
+      <ol>
+        <li>审核通过后，登录公众平台 → <strong>版本管理</strong></li>
+        <li>在 <strong>审核版本</strong> 中点击 <strong>发布</strong></li>
+        <li>选择发布方式：全量发布（所有用户立即看到）或灰度发布（先给部分用户，逐步放开）</li>
+        <li>点击确认发布</li>
+      </ol>
+      <div class="box info">
+        <div class="box-title">🎉 上线后</div>
+        <p>用户可以在微信搜索小程序名称，或扫描小程序码访问。后续更新重复步骤 9-12。</p>
+      </div>
+    </section>
+
+    <section class="step" id="faq">
+      <div class="step-header">
+        <div class="step-num">?</div>
+        <h2>常见问题</h2>
+      </div>
+      <div class="two-col">
+        <div class="card">
+          <strong>导入报错 dist/game.json</strong><br>
+          账号是小游戏账号，需重新注册普通小程序。
+        </div>
+        <div class="card">
+          <strong>云函数调用失败</strong><br>
+          检查是否全部部署，以及环境 ID 是否正确。
+        </div>
+        <div class="card">
+          <strong>数据库找不到集合</strong><br>
+          手动创建 4 个集合，或调用 init-db 云函数。
+        </div>
+        <div class="card">
+          <strong>主题切换后刷新恢复</strong><br>
+          确保 updateChildProfile 云函数已部署。
+        </div>
+        <div class="card">
+          <strong>审核被驳回</strong><br>
+          按审核意见调整类目或补充材料。
+        </div>
+        <div class="card">
+          <strong>真机白屏</strong><br>
+          更新微信到最新版，或在开发者工具开启调试。
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    本教程配套项目：特种兵暑假作战小程序 · 有任何步骤卡住，截图当前页面和报错信息发给开发者
+  </footer>
+
+  <script>
+    (function() {
+      try {
+        document.querySelectorAll('a[href^="#"]').forEach(function(link) {
+          link.addEventListener('click', function(e) {
+            var target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+              e.preventDefault();
+              target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+          });
+        });
+      } catch (err) { /* noop */ }
+    })();
+  </script>
+</body>
+</html>
