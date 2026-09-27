@@ -1,11 +1,12 @@
 import { useState } from 'react';
-import { View, Text, Picker, Textarea, ScrollView } from '@tarojs/components';
+import { View, Text, Image, Picker, Textarea, ScrollView } from '@tarojs/components';
 import Taro, { useLoad } from '@tarojs/taro';
 import { useTheme } from '@/utils/theme';
 import { useGlobalStore } from '@/stores/global';
 import { callCloud, showError, showSuccess } from '@/utils/cloud';
 import { TaskCard } from '@/components/TaskCard';
 import { clampDate, getTodayISO } from '@/utils/date';
+import { avatarOptions } from '@/config/theme';
 import type {
   ChildProfile,
   Plan,
@@ -233,6 +234,23 @@ export default function ParentPage() {
     }
   };
 
+  const [showAvatarPicker, setShowAvatarPicker] = useState(false);
+
+  const handleAvatarChange = async (avatarUrl: string) => {
+    if (!profile) return;
+    try {
+      const data = await callCloud<{ profile: ChildProfile }>('updateChildProfile', {
+        childId: profile._id,
+        avatarUrl,
+      });
+      setProfile(data.profile);
+      setShowAvatarPicker(false);
+      showSuccess('头像已更新');
+    } catch (err) {
+      showError(err);
+    }
+  };
+
   const renderProfile = () => (
     <View>
       <Text className="text-lg font-bold mb-3" style={{ color: colors.text }}>
@@ -242,8 +260,50 @@ export default function ParentPage() {
         className="rounded-3xl p-4 mb-4"
         style={{ backgroundColor: colors.card, borderWidth: '2rpx', borderColor: colors.border }}
       >
-        <Text style={{ color: colors.text }}>昵称：{profile?.name}</Text>
-        <Text style={{ color: colors.textMuted }}>主题：{profile?.theme === 'prince' ? '王子' : '公主'}</Text>
+        <View className="flex flex-row items-center mb-3">
+          {profile?.avatarUrl ? (
+            <Image
+              src={profile.avatarUrl}
+              mode="aspectFill"
+              className="mr-3"
+              style={{ width: '96rpx', height: '96rpx', borderRadius: '24rpx' }}
+            />
+          ) : null}
+          <View>
+            <Text style={{ color: colors.text }}>昵称：{profile?.name}</Text>
+            <Text style={{ color: colors.textMuted }}>主题：{profile?.theme === 'prince' ? '王子' : '公主'}</Text>
+          </View>
+        </View>
+        <View
+          className="rounded-full py-2 flex items-center justify-center active:scale-95"
+          style={{ backgroundColor: colors.accent }}
+          onClick={() => setShowAvatarPicker(!showAvatarPicker)}
+        >
+          <Text className="text-sm font-bold" style={{ color: colors.text }}>
+            {showAvatarPicker ? '收起头像选择' : '更换头像'}
+          </Text>
+        </View>
+        {showAvatarPicker ? (
+          <View className="flex flex-row flex-wrap mt-3">
+            {avatarOptions[colors.theme].map((option) => (
+              <View key={option} className="w-1/3 p-1" onClick={() => handleAvatarChange(option)}>
+                <View
+                  className="rounded-2xl p-1"
+                  style={{
+                    borderWidth: profile?.avatarUrl === option ? '4rpx' : '2rpx',
+                    borderColor: profile?.avatarUrl === option ? colors.primary : colors.border,
+                  }}
+                >
+                  <Image
+                    src={option}
+                    mode="aspectFill"
+                    style={{ width: '100%', height: '120rpx', borderRadius: '16rpx' }}
+                  />
+                </View>
+              </View>
+            ))}
+          </View>
+        ) : null}
       </View>
 
       <Text className="text-lg font-bold mb-3" style={{ color: colors.text }}>
@@ -423,7 +483,7 @@ export default function ParentPage() {
               >
                 <Text
                   className="text-lg font-bold"
-                  style={{ color: colors.theme === 'prince' ? colors.bg : '#FFFFFF' }}
+                  style={{ color: colors.bg }}
                 >
                   确认补卡并发放积分
                 </Text>
@@ -451,7 +511,7 @@ export default function ParentPage() {
       >
         <Text
           className="text-lg font-bold"
-          style={{ color: colors.theme === 'prince' ? colors.bg : '#FFFFFF' }}
+          style={{ color: colors.bg }}
         >
           导出备份并复制
         </Text>
@@ -589,7 +649,7 @@ export default function ParentPage() {
             <Text
               className="text-sm font-bold"
               style={{
-                color: activeTab === tab.id ? (colors.theme === 'prince' ? colors.bg : '#FFFFFF') : colors.text,
+                color: activeTab === tab.id ? colors.bg : colors.text,
               }}
             >
               {tab.name}

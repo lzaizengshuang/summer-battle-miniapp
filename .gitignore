@@ -46,3 +46,7 @@ project.private.config.json
 .codegraph/
 .cozeproj/reduction
 .preview
+
+# Design preview & asset source backups (local only)
+preview-design/
+assets-raw/

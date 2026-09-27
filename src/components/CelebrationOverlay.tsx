@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { View, Text } from '@tarojs/components';
+import { useEffect, useMemo, useState } from 'react';
+import { View, Text, Image } from '@tarojs/components';
 import { useTheme } from '@/utils/theme';
 
 interface CelebrationOverlayProps {
@@ -8,6 +8,8 @@ interface CelebrationOverlayProps {
   message?: string;
   subMessage?: string;
 }
+
+const CONFETTI_COLORS = ['#F472B6', '#FBBF24', '#C084FC', '#38BDF8', '#F5F3FF'];
 
 export const CelebrationOverlay = ({
   visible,
@@ -18,11 +20,23 @@ export const CelebrationOverlay = ({
   const { colors, theme } = useTheme();
   const [scale, setScale] = useState(0);
 
+  const confetti = useMemo(
+    () =>
+      Array.from({ length: 28 }, (_, i) => ({
+        left: `${(i * 37 + 13) % 100}%`,
+        color: CONFETTI_COLORS[i % CONFETTI_COLORS.length],
+        delay: `${(i % 10) * 0.18}s`,
+        duration: `${2.2 + (i % 5) * 0.35}s`,
+        size: `${10 + (i % 3) * 6}rpx`,
+      })),
+    [],
+  );
+
   useEffect(() => {
     if (visible) {
       setScale(0);
       const t = setTimeout(() => setScale(1), 50);
-      const auto = setTimeout(() => onClose(), 2500);
+      const auto = setTimeout(() => onClose(), 2800);
       return () => {
         clearTimeout(t);
         clearTimeout(auto);
@@ -32,22 +46,43 @@ export const CelebrationOverlay = ({
 
   if (!visible) return null;
 
-  const isPrince = theme === 'prince';
+  const medalImg =
+    theme === 'prince'
+      ? '/assets/prince/celebrate-medal.webp'
+      : '/assets/princess/celebrate-medal.webp';
+  const btnTextColor = theme === 'prince' ? '#0B1026' : '#150A2E';
 
   return (
     <View
-      className="fixed inset-0 z-50 flex flex-col items-center justify-center px-8"
-      style={{ backgroundColor: 'rgba(0,0,0,0.85)' }}
+      className="fixed inset-0 z-50 flex flex-col items-center justify-center px-8 overflow-hidden"
+      style={{ backgroundColor: 'rgba(6,10,25,0.9)' }}
     >
+      <View className="absolute inset-0">
+        {confetti.map((c, i) => (
+          <View
+            key={i}
+            className="confetti-piece rounded-sm"
+            style={{
+              left: c.left,
+              width: c.size,
+              height: c.size,
+              backgroundColor: c.color,
+              animationDelay: c.delay,
+              animationDuration: c.duration,
+            }}
+          />
+        ))}
+      </View>
+
       <View
-        className="rounded-full w-40 h-40 flex items-center justify-center mb-6 transition-transform duration-500"
+        className="rounded-full w-44 h-44 flex items-center justify-center mb-6 transition-transform duration-500"
         style={{
-          backgroundColor: colors.gold,
+          backgroundColor: 'rgba(251,191,36,0.12)',
           transform: `scale(${scale})`,
-          boxShadow: `0 0 60rpx ${colors.gold}`,
+          boxShadow: `0 0 80rpx ${colors.gold}`,
         }}
       >
-        <Text className="text-7xl">{isPrince ? '🎖️' : '👑'}</Text>
+        <Image src={medalImg} mode="aspectFit" className="w-36 h-36" />
       </View>
 
       <Text
@@ -67,10 +102,7 @@ export const CelebrationOverlay = ({
         style={{ backgroundColor: colors.primary }}
         onClick={onClose}
       >
-        <Text
-          className="text-lg font-bold"
-          style={{ color: isPrince ? colors.bg : '#FFFFFF' }}
-        >
+        <Text className="text-lg font-bold" style={{ color: btnTextColor }}>
           太棒了！
         </Text>
       </View>

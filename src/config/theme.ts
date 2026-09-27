@@ -12,34 +12,42 @@ export interface ThemeColors {
   accent: string;
   success: string;
   danger: string;
+  /** 首页背景图（本地资源路径），无则用纯色 bg */
+  bgImage?: string;
+  /** 半透明玻璃卡片底色 */
+  glass?: string;
 }
 
 export const themeColors: Record<ThemeType, ThemeColors> = {
   prince: {
     theme: 'prince',
-    primary: '#39FF14',
-    bg: '#0A0A0A',
-    card: '#141414',
-    border: 'rgba(57,255,20,0.25)',
-    text: '#E8E8E8',
-    textMuted: '#888888',
-    gold: '#FFD700',
-    accent: '#39FF14',
-    success: '#39FF14',
-    danger: '#FF4D4D',
+    primary: '#A3E635',
+    bg: '#0B1026',
+    card: 'rgba(255,255,255,0.06)',
+    glass: 'rgba(255,255,255,0.05)',
+    border: 'rgba(255,255,255,0.12)',
+    text: '#F1F5F9',
+    textMuted: '#8B94B3',
+    gold: '#FBBF24',
+    accent: '#38BDF8',
+    success: '#A3E635',
+    danger: '#F87171',
+    bgImage: '/assets/prince/bg-night.webp',
   },
   princess: {
     theme: 'princess',
-    primary: '#7ED321',
-    bg: '#C47F3F',
-    card: '#F5DEB3',
-    border: 'rgba(93,64,55,0.25)',
-    text: '#5D4037',
-    textMuted: '#8D6E63',
-    gold: '#FFD54F',
-    accent: '#9B59B6',
-    success: '#7ED321',
-    danger: '#EF5350',
+    primary: '#F472B6',
+    bg: '#150A2E',
+    card: 'rgba(255,255,255,0.06)',
+    glass: 'rgba(255,255,255,0.05)',
+    border: 'rgba(255,255,255,0.12)',
+    text: '#F5F3FF',
+    textMuted: '#A78BFA',
+    gold: '#FBBF24',
+    accent: '#C084FC',
+    success: '#34D399',
+    danger: '#F87171',
+    bgImage: '/assets/princess/bg-night.webp',
   },
 };
 
@@ -80,7 +88,7 @@ export const rankNames: Record<ThemeType, string[]> = {
   ],
 };
 
-export const medalDefs: MedalDef[] = [
+const medalMeta: Array<{ id: string; name: string; desc: string; icon: string }> = [
   { id: 'first', name: '初出茅庐', desc: '完成第1天打卡', icon: '🥉' },
   { id: 'streak7', name: '铁人勋章', desc: '历史最大连续打卡≥7天', icon: '🥈' },
   { id: 'streak14', name: '钢铁意志', desc: '历史最大连续打卡≥14天', icon: '🥇' },
@@ -88,7 +96,58 @@ export const medalDefs: MedalDef[] = [
   { id: 'all6', name: '全能战士', desc: '单日完成全部已配置任务', icon: '⚔️' },
   { id: 'fast', name: '速战速决', desc: '任意记录完成用时≤30分钟', icon: '⏱️' },
   { id: 'perfect', name: '零失误', desc: '口算类任务连续10天完成', icon: '🎯' },
+  { id: 'earlybird', name: '早起标兵', desc: '累计5天在中午前汇报', icon: '🌅' },
+  { id: 'days7', name: '坚持不懈', desc: '累计完成7个学习日', icon: '🧗' },
+  { id: 'days30', name: '月度尖兵', desc: '累计完成30个学习日', icon: '📅' },
+  { id: 'halfway', name: '半程冲锋', desc: '完成计划一半学习日', icon: '⛰️' },
+  { id: 'finisher', name: '完美收官', desc: '完成计划最后一个学习日', icon: '🏁' },
+  { id: 'comeback', name: '卷土重来', desc: '中断后重新坚持3天', icon: '🔥' },
+  { id: 'oral50', name: '口算之星', desc: '口算任务累计完成50次', icon: '🧮' },
+  { id: 'rich500', name: '军功显赫', desc: '总军功达到500', icon: '💰' },
 ];
+
+/** 各主题勋章图：老 7 枚王子为透明底，其余为不透明瓦片（tile） */
+const medalImages: Record<ThemeType, Record<string, { src: string; tile: boolean }>> = {
+  prince: {
+    first: { src: '/assets/prince/medals/first.webp', tile: false },
+    streak7: { src: '/assets/prince/medals/streak7.webp', tile: false },
+    streak14: { src: '/assets/prince/medals/streak14.webp', tile: false },
+    streak30: { src: '/assets/prince/medals/streak30.webp', tile: false },
+    all6: { src: '/assets/prince/medals/all6.webp', tile: false },
+    fast: { src: '/assets/prince/medals/fast.webp', tile: false },
+    perfect: { src: '/assets/prince/medals/perfect.webp', tile: false },
+    earlybird: { src: '/assets/prince/medals/earlybird.webp', tile: true },
+    days7: { src: '/assets/prince/medals/days7.webp', tile: true },
+    days30: { src: '/assets/prince/medals/days30.webp', tile: true },
+    halfway: { src: '/assets/prince/medals/halfway.webp', tile: true },
+    finisher: { src: '/assets/prince/medals/finisher.webp', tile: true },
+    comeback: { src: '/assets/prince/medals/comeback.webp', tile: true },
+    oral50: { src: '/assets/prince/medals/oral50.webp', tile: true },
+    rich500: { src: '/assets/prince/medals/rich500.webp', tile: true },
+  },
+  princess: Object.fromEntries(
+    ['first', 'streak7', 'streak14', 'streak30', 'all6', 'fast', 'perfect',
+     'earlybird', 'days7', 'days30', 'halfway', 'finisher', 'comeback', 'oral50', 'rich500']
+      .map((id) => [id, { src: `/assets/princess/medals/${id}.webp`, tile: true }]),
+  ) as Record<string, { src: string; tile: boolean }>,
+};
+
+export const medalDefs: Record<ThemeType, MedalDef[]> = {
+  prince: medalMeta.map((m) => ({ ...m, image: medalImages.prince[m.id].src, tile: medalImages.prince[m.id].tile })),
+  princess: medalMeta.map((m) => ({ ...m, image: medalImages.princess[m.id].src, tile: medalImages.princess[m.id].tile })),
+};
+
+/** 15 级军衔徽章（随等级递进：青铜→白银→黄金→元帅） */
+export const rankEmblems: Record<ThemeType, string[]> = {
+  prince: Array.from({ length: 15 }, (_, i) => `/assets/prince/ranks/r${String(i + 1).padStart(2, '0')}.webp`),
+  princess: Array.from({ length: 15 }, (_, i) => `/assets/princess/ranks/r${String(i + 1).padStart(2, '0')}.webp`),
+};
+
+/** 孩子头像候选（创建档案时选择） */
+export const avatarOptions: Record<ThemeType, string[]> = {
+  prince: Array.from({ length: 6 }, (_, i) => `/assets/prince/avatars/a${i + 1}.webp`),
+  princess: Array.from({ length: 6 }, (_, i) => `/assets/princess/avatars/a${i + 1}.webp`),
+};
 
 export const themeText: Record<
   ThemeType,

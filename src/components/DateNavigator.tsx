@@ -1,4 +1,5 @@
 import { View, Text } from '@tarojs/components';
+import { ChevronLeft, ChevronRight } from 'lucide-react-taro';
 import { useTheme } from '@/utils/theme';
 import { formatDateCN, isToday, addISODays, getTodayISO } from '@/utils/date';
 
@@ -33,26 +34,28 @@ export const DateNavigator = ({
 
   return (
     <View
-      className="flex flex-row items-center justify-between rounded-3xl px-4 py-4 mb-4"
-      style={{ backgroundColor: colors.card, borderWidth: '2rpx', borderColor: colors.border }}
+      className="flex flex-row items-center justify-between rounded-3xl px-3 py-3 mb-4"
+      style={{
+        backgroundColor: colors.glass || colors.card,
+        borderWidth: '2rpx',
+        borderColor: colors.border,
+      }}
     >
       <View
-        className="w-14 h-14 rounded-2xl flex items-center justify-center active:scale-95 transition-transform"
-        style={{ backgroundColor: colors.primary }}
+        className="w-12 h-12 rounded-2xl flex items-center justify-center active:scale-90 transition-transform"
+        style={{ borderWidth: '2rpx', borderColor: colors.border }}
         onClick={goPrev}
       >
-        <Text className="text-2xl font-bold" style={{ color: colors.bg }}>
-          ◀
-        </Text>
+        <ChevronLeft size={28} color={colors.text} />
       </View>
 
       <View className="flex flex-col items-center" onClick={goToday}>
-        <Text className="text-xl font-bold" style={{ color: colors.text }}>
+        <Text className="text-lg font-bold" style={{ color: colors.text }}>
           {formatDateCN(date)}
         </Text>
         {isToday(date) ? (
           <Text className="text-xs mt-1" style={{ color: colors.primary }}>
-            · 今日
+            今日
           </Text>
         ) : (
           <Text className="text-xs mt-1" style={{ color: colors.textMuted }}>
@@ -62,13 +65,11 @@ export const DateNavigator = ({
       </View>
 
       <View
-        className="w-14 h-14 rounded-2xl flex items-center justify-center active:scale-95 transition-transform"
-        style={{ backgroundColor: colors.primary }}
+        className="w-12 h-12 rounded-2xl flex items-center justify-center active:scale-90 transition-transform"
+        style={{ borderWidth: '2rpx', borderColor: colors.border }}
         onClick={goNext}
       >
-        <Text className="text-2xl font-bold" style={{ color: colors.bg }}>
-          ▶
-        </Text>
+        <ChevronRight size={28} color={colors.text} />
       </View>
     </View>
   );

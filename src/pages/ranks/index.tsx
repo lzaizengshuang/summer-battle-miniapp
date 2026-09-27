@@ -1,8 +1,8 @@
-
-import { View, Text, ScrollView } from '@tarojs/components';
+import { View, Text, Image, ScrollView } from '@tarojs/components';
 import Taro, { useLoad } from '@tarojs/taro';
 import { useTheme } from '@/utils/theme';
 import { useGlobalStore } from '@/stores/global';
+import { rankEmblems } from '@/config/theme';
 import type { RankInfo } from '@/types';
 import { callCloud, showError } from '@/utils/cloud';
 
@@ -97,18 +97,27 @@ export default function RanksPage() {
               <View
                 className="w-20 h-20 rounded-full flex items-center justify-center z-10"
                 style={{
-                  backgroundColor: isCurrent ? colors.gold : isUnlocked ? colors.primary : colors.card,
+                  backgroundColor: 'transparent',
                   borderWidth: '4rpx',
                   borderColor: isCurrent ? colors.gold : colors.border,
                   boxShadow: isCurrent ? `0 0 30rpx ${colors.gold}` : 'none',
+                  overflow: 'hidden',
                 }}
               >
-                <Text
-                  className="text-2xl font-bold"
-                  style={{ color: isCurrent ? colors.bg : colors.text }}
-                >
-                  {rank}
-                </Text>
+                {rankEmblems[colors.theme][idx] ? (
+                  <Image
+                    src={rankEmblems[colors.theme][idx]}
+                    mode="aspectFill"
+                    style={{ width: '100%', height: '100%' }}
+                  />
+                ) : (
+                  <Text
+                    className="text-2xl font-bold"
+                    style={{ color: isCurrent ? colors.bg : colors.text }}
+                  >
+                    {rank}
+                  </Text>
+                )}
               </View>
 
               <View

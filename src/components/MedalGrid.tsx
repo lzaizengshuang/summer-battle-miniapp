@@ -1,4 +1,4 @@
-import { View, Text } from '@tarojs/components';
+import { View, Text, Image } from '@tarojs/components';
 import { useTheme } from '@/utils/theme';
 
 interface MedalGridProps {
@@ -28,7 +28,25 @@ export const MedalGrid = ({ unlockedIds, onPress }: MedalGridProps) => {
                 opacity: unlocked ? 1 : 0.5,
               }}
             >
-              <Text className="text-5xl mb-2">{medal.icon}</Text>
+              {medal.image ? (
+                medal.tile ? (
+                  <Image
+                    src={medal.image}
+                    mode="aspectFill"
+                    className="w-full h-28 mb-2"
+                    style={{ borderRadius: '16rpx', opacity: unlocked ? 1 : 0.4 }}
+                  />
+                ) : (
+                  <Image
+                    src={medal.image}
+                    mode="aspectFit"
+                    className="w-20 h-20 mb-2"
+                    style={{ opacity: unlocked ? 1 : 0.35, filter: unlocked ? 'none' : 'grayscale(90%)' }}
+                  />
+                )
+              ) : (
+                <Text className="text-5xl mb-2">{medal.icon}</Text>
+              )}
               <Text
                 className="text-sm font-bold text-center"
                 style={{ color: unlocked ? colors.gold : colors.text }}

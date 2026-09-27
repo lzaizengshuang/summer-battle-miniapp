@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { View, Text } from '@tarojs/components';
+import { Check } from 'lucide-react-taro';
 import { useTheme } from '@/utils/theme';
 import type { TaskTemplate, TaskRecord } from '@/types';
 
@@ -10,7 +11,7 @@ interface TaskCardProps {
 }
 
 export const TaskCard = ({ task, onToggle, disabled }: TaskCardProps) => {
-  const { colors, theme } = useTheme();
+  const { colors } = useTheme();
   const completed = !!task.record?.completed;
   const [pop, setPop] = useState(false);
 
@@ -29,21 +30,19 @@ export const TaskCard = ({ task, onToggle, disabled }: TaskCardProps) => {
     setTimeout(() => setPop(false), 300);
   };
 
-  const isPrince = theme === 'prince';
-
   return (
     <View
       className="flex flex-row items-center rounded-3xl p-5 mb-4 transition-transform duration-200 active:scale-95"
       style={{
-        backgroundColor: colors.card,
+        backgroundColor: colors.glass || colors.card,
         borderWidth: '2rpx',
-        borderColor: colors.border,
+        borderColor: completed ? colors.primary : colors.border,
       }}
       onClick={handleClick}
     >
       <View
         className="w-14 h-14 rounded-2xl flex items-center justify-center text-4xl mr-4"
-        style={{ backgroundColor: `${task.color}20` }}
+        style={{ backgroundColor: `${task.color}26` }}
       >
         <Text>{task.icon || '📝'}</Text>
       </View>
@@ -51,7 +50,10 @@ export const TaskCard = ({ task, onToggle, disabled }: TaskCardProps) => {
       <View className="flex-1">
         <Text
           className="text-lg font-bold"
-          style={{ color: colors.text }}
+          style={{
+            color: completed ? colors.textMuted : colors.text,
+            textDecoration: completed ? 'line-through' : 'none',
+          }}
         >
           {task.name}
         </Text>
@@ -66,7 +68,7 @@ export const TaskCard = ({ task, onToggle, disabled }: TaskCardProps) => {
       </View>
 
       <View
-        className={`w-14 h-14 rounded-2xl flex items-center justify-center border-4 transition-transform duration-200 ${
+        className={`w-12 h-12 rounded-full flex items-center justify-center border-4 transition-transform duration-200 ${
           pop ? 'scale-125' : 'scale-100'
         }`}
         style={{
@@ -75,12 +77,7 @@ export const TaskCard = ({ task, onToggle, disabled }: TaskCardProps) => {
         }}
       >
         {completed ? (
-          <Text
-            className="text-3xl font-bold"
-            style={{ color: isPrince ? '#0A0A0A' : '#FFFFFF' }}
-          >
-            ✓
-          </Text>
+          <Check size={26} strokeWidth={3} color={colors.bg} />
         ) : null}
       </View>
     </View>

@@ -7,7 +7,7 @@ import { callCloud, showError } from '@/utils/cloud';
 import type { MedalDef, UserProgress } from '@/types';
 
 export default function MedalsPage() {
-  const { colors } = useTheme();
+  const { colors, medals } = useTheme();
   const profile = useGlobalStore((s) => s.profile);
   const plan = useGlobalStore((s) => s.plan);
   const progress = useGlobalStore((s) => s.progress);
@@ -68,7 +68,7 @@ export default function MedalsPage() {
         荣誉墙
       </Text>
       <Text className="text-sm text-center mb-6" style={{ color: colors.textMuted }}>
-        已解锁 {progress.medals.length} / 7 枚勋章
+        已解锁 {progress.medals.length} / {medals.length} 枚勋章
       </Text>
 
       <MedalGrid unlockedIds={progress.medals} />

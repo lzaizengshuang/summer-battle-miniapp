@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
-import { View, Text, ScrollView } from '@tarojs/components';
+import { View, Text, ScrollView, Image } from '@tarojs/components';
 import Taro, { useLoad, usePullDownRefresh } from '@tarojs/taro';
+import { Flame, Zap } from 'lucide-react-taro';
 import { useTheme } from '@/utils/theme';
 import { useGlobalStore } from '@/stores/global';
 import { callCloud, showError, showSuccess } from '@/utils/cloud';
@@ -165,180 +166,223 @@ export default function IndexPage() {
         100
       : 0;
 
+  const cardBg = colors.glass || colors.card;
+
   return (
-    <ScrollView
-      className="min-h-full px-4 py-4"
-      style={{ backgroundColor: colors.bg }}
-      scrollY
-      refresherEnabled
-      onRefresherRefresh={loadSchedule}
-    >
-      <DateNavigator
-        date={date}
-        onChange={(d) => setDate(clampDate(d, plan?.startDate, plan?.endDate))}
-        minDate={plan?.startDate}
-        maxDate={plan?.endDate}
-      />
+    <View className="relative min-h-full" style={{ backgroundColor: colors.bg }}>
+      {colors.bgImage ? (
+        <Image
+          src={colors.bgImage}
+          mode="aspectFill"
+          className="absolute top-0 left-0 w-full"
+          style={{ height: '100%' }}
+        />
+      ) : null}
 
-      <View
-        className="rounded-3xl p-5 mb-4"
-        style={{ backgroundColor: colors.card, borderWidth: '2rpx', borderColor: colors.border }}
+      <ScrollView
+        className="relative z-10 min-h-full px-4 py-4"
+        scrollY
+        refresherEnabled
+        onRefresherRefresh={loadSchedule}
       >
-        <View className="flex flex-row items-center justify-between">
-          <RankBadge rank={rank} current onLongPress={openParent} />
-          <View className="flex-1 mx-4">
-            <Text className="text-sm" style={{ color: colors.textMuted }}>
-              {rankNames[rank - 1]}
-            </Text>
-            <View
-              className="h-4 rounded-full mt-2 overflow-hidden"
-              style={{ backgroundColor: colors.bg }}
-            >
+        <DateNavigator
+          date={date}
+          onChange={(d) => setDate(clampDate(d, plan?.startDate, plan?.endDate))}
+          minDate={plan?.startDate}
+          maxDate={plan?.endDate}
+        />
+
+        <View
+          className="rounded-3xl p-5 mb-4"
+          style={{ backgroundColor: cardBg, borderWidth: '2rpx', borderColor: colors.border }}
+        >
+          <View className="flex flex-row items-center justify-between">
+            <RankBadge rank={rank} current onLongPress={openParent} />
+            <View className="flex-1 mx-4">
+              <Text className="text-sm" style={{ color: colors.textMuted }}>
+                {rankNames[rank - 1]}
+              </Text>
               <View
-                className="h-full rounded-full"
-                style={{
-                  width: `${Math.min(100, Math.max(0, rankProgress))}%`,
-                  backgroundColor: colors.gold,
-                }}
-              />
-            </View>
-            <Text className="text-xs mt-1" style={{ color: colors.textMuted }}>
-              升级进度 {Math.round(rankProgress)}%
-            </Text>
-          </View>
-        </View>
-
-        <View className="flex flex-row mt-5">
-          <View className="flex-1 flex flex-col items-center">
-            <Text className="text-3xl">🔥</Text>
-            <Text className="text-xl font-bold" style={{ color: colors.text }}>
-              {progress?.currentConsecutiveDays || 0}
-            </Text>
-            <Text className="text-xs" style={{ color: colors.textMuted }}>
-              连续打卡
-            </Text>
-          </View>
-          <View className="flex-1 flex flex-col items-center">
-            <Text className="text-3xl">⚡</Text>
-            <Text className="text-xl font-bold" style={{ color: colors.text }}>
-              {progress?.totalPoints || 0}
-            </Text>
-            <Text className="text-xs" style={{ color: colors.textMuted }}>
-              {text.points}
-            </Text>
-          </View>
-        </View>
-      </View>
-
-      {loading && !schedule ? (
-        <Text className="text-center py-10" style={{ color: colors.textMuted }}>
-          加载中…
-        </Text>
-      ) : null}
-
-      {schedule?.dayType === 'rest' ? (
-        <View
-          className="rounded-3xl p-10 flex flex-col items-center justify-center"
-          style={{ backgroundColor: colors.card, borderWidth: '2rpx', borderColor: colors.border }}
-        >
-          <Text className="text-6xl mb-4">🏖️</Text>
-          <Text className="text-2xl font-bold" style={{ color: colors.text }}>
-            {text.rest}
-          </Text>
-          <Text className="text-sm mt-2" style={{ color: colors.textMuted }}>
-            今天没有任务，好好休息吧
-          </Text>
-        </View>
-      ) : null}
-
-      {schedule?.dayType === 'trip' ? (
-        <View
-          className="rounded-3xl p-10 flex flex-col items-center justify-center"
-          style={{ backgroundColor: colors.card, borderWidth: '2rpx', borderColor: colors.border }}
-        >
-          <Text className="text-6xl mb-4">✈️</Text>
-          <Text className="text-2xl font-bold" style={{ color: colors.text }}>
-            {text.trip}
-          </Text>
-          <Text className="text-sm mt-2" style={{ color: colors.textMuted }}>
-            出游不中断连续打卡
-          </Text>
-        </View>
-      ) : null}
-
-      {schedule?.dayType === 'learn' ? (
-        <>
-          {schedule.tasks.length === 0 ? (
-            <View
-              className="rounded-3xl p-10 flex flex-col items-center justify-center"
-              style={{ backgroundColor: colors.card, borderWidth: '2rpx', borderColor: colors.border }}
-            >
-              <Text className="text-2xl font-bold" style={{ color: colors.text }}>
-                今日暂无任务
+                className="h-3 rounded-full mt-2 overflow-hidden"
+                style={{ backgroundColor: 'rgba(255,255,255,0.10)' }}
+              >
+                <View
+                  className="h-full rounded-full"
+                  style={{
+                    width: `${Math.min(100, Math.max(0, rankProgress))}%`,
+                    backgroundColor: colors.gold,
+                  }}
+                />
+              </View>
+              <Text className="text-xs mt-1" style={{ color: colors.textMuted }}>
+                升级进度 {Math.round(rankProgress)}%
               </Text>
             </View>
-          ) : (
-            <>
-              {schedule.tasks.map((task) => (
-                <TaskCard
-                  key={task.id}
-                  task={task}
-                  onToggle={(completed) => handleToggle(task.id, completed)}
-                  disabled={schedule.record?.isReported}
-                />
-              ))}
+          </View>
 
-              <View className="flex flex-row items-center justify-between mb-4">
-                <Text style={{ color: colors.textMuted }}>
-                  进度 {completedCount}/{totalCount}
+          <View className="flex flex-row mt-5">
+            <View className="flex-1 flex flex-row items-center justify-center">
+              <View
+                className="w-12 h-12 rounded-2xl flex items-center justify-center mr-3"
+                style={{ backgroundColor: 'rgba(251,191,36,0.15)' }}
+              >
+                <Flame size={28} color={colors.gold} />
+              </View>
+              <View>
+                <Text className="text-2xl font-bold" style={{ color: colors.text }}>
+                  {progress?.currentConsecutiveDays || 0}
                 </Text>
-                {!schedule.record?.isReported ? (
+                <Text className="text-xs" style={{ color: colors.textMuted }}>
+                  连续打卡
+                </Text>
+              </View>
+            </View>
+            <View className="flex-1 flex flex-row items-center justify-center">
+              <View
+                className="w-12 h-12 rounded-2xl flex items-center justify-center mr-3"
+                style={{ backgroundColor: 'rgba(56,189,248,0.15)' }}
+              >
+                <Zap size={28} color={colors.accent} />
+              </View>
+              <View>
+                <Text className="text-2xl font-bold" style={{ color: colors.text }}>
+                  {progress?.totalPoints || 0}
+                </Text>
+                <Text className="text-xs" style={{ color: colors.textMuted }}>
+                  {text.points}
+                </Text>
+              </View>
+            </View>
+          </View>
+        </View>
+
+        {loading && !schedule ? (
+          <Text className="text-center py-10" style={{ color: colors.textMuted }}>
+            加载中…
+          </Text>
+        ) : null}
+
+        {schedule?.dayType === 'rest' ? (
+          <View
+            className="rounded-3xl p-10 flex flex-col items-center justify-center"
+            style={{ backgroundColor: cardBg, borderWidth: '2rpx', borderColor: colors.border }}
+          >
+            <View
+              className="w-24 h-24 rounded-full flex items-center justify-center mb-4"
+              style={{ backgroundColor: 'rgba(163,230,53,0.12)' }}
+            >
+              <Text className="text-5xl">🏖️</Text>
+            </View>
+            <Text className="text-2xl font-bold" style={{ color: colors.text }}>
+              {text.rest}
+            </Text>
+            <Text className="text-sm mt-2" style={{ color: colors.textMuted }}>
+              今天没有任务，好好休息吧
+            </Text>
+          </View>
+        ) : null}
+
+        {schedule?.dayType === 'trip' ? (
+          <View
+            className="rounded-3xl p-10 flex flex-col items-center justify-center"
+            style={{ backgroundColor: cardBg, borderWidth: '2rpx', borderColor: colors.border }}
+          >
+            <View
+              className="w-24 h-24 rounded-full flex items-center justify-center mb-4"
+              style={{ backgroundColor: 'rgba(56,189,248,0.12)' }}
+            >
+              <Text className="text-5xl">✈️</Text>
+            </View>
+            <Text className="text-2xl font-bold" style={{ color: colors.text }}>
+              {text.trip}
+            </Text>
+            <Text className="text-sm mt-2" style={{ color: colors.textMuted }}>
+              出游不中断连续打卡
+            </Text>
+          </View>
+        ) : null}
+
+        {schedule?.dayType === 'learn' ? (
+          <>
+            {schedule.tasks.length === 0 ? (
+              <View
+                className="rounded-3xl p-10 flex flex-col items-center justify-center"
+                style={{ backgroundColor: cardBg, borderWidth: '2rpx', borderColor: colors.border }}
+              >
+                <Text className="text-2xl font-bold" style={{ color: colors.text }}>
+                  今日暂无任务
+                </Text>
+              </View>
+            ) : (
+              <>
+                {schedule.tasks.map((task) => (
+                  <TaskCard
+                    key={task.id}
+                    task={task}
+                    onToggle={(completed) => handleToggle(task.id, completed)}
+                    disabled={schedule.record?.isReported}
+                  />
+                ))}
+
+                <View className="flex flex-row items-center justify-between mb-4">
+                  <Text style={{ color: colors.textMuted }}>
+                    进度 {completedCount}/{totalCount}
+                  </Text>
+                  {!schedule.record?.isReported ? (
+                    <View
+                      className="px-5 py-2 rounded-full active:scale-95 transition-transform"
+                      style={{
+                        backgroundColor: 'rgba(56,189,248,0.15)',
+                        borderWidth: '2rpx',
+                        borderColor: colors.accent,
+                      }}
+                      onClick={handleStart}
+                    >
+                      <Text className="text-sm font-bold" style={{ color: colors.accent }}>
+                        {startTime ? '进行中…' : text.start}
+                      </Text>
+                    </View>
+                  ) : null}
+                </View>
+
+                {allCompleted && !schedule.record?.isReported ? (
                   <View
-                    className="px-5 py-2 rounded-full active:scale-95 transition-transform"
-                    style={{ backgroundColor: colors.accent }}
-                    onClick={handleStart}
+                    className="mt-2 rounded-full py-4 px-6 flex items-center justify-center active:scale-95 transition-transform"
+                    style={{
+                      backgroundColor: colors.primary,
+                      boxShadow: `0 8rpx 32rpx ${colors.primary}59`,
+                    }}
+                    onClick={handleReport}
                   >
-                    <Text className="text-sm font-bold" style={{ color: colors.text }}>
-                      {startTime ? '进行中…' : text.start}
+                    <Text
+                      className="text-xl font-bold"
+                      style={{ color: colors.bg }}
+                    >
+                      {text.report}
+                    </Text>
+                  </View>
+                ) : schedule.record?.isReported ? (
+                  <View
+                    className="mt-2 rounded-full py-4 px-6 flex items-center justify-center"
+                    style={{ backgroundColor: 'rgba(255,255,255,0.08)' }}
+                  >
+                    <Text className="text-xl font-bold" style={{ color: colors.textMuted }}>
+                      今日已汇报
                     </Text>
                   </View>
                 ) : null}
-              </View>
+              </>
+            )}
+          </>
+        ) : null}
 
-              {allCompleted && !schedule.record?.isReported ? (
-                <View
-                  className="mt-2 rounded-full py-4 px-6 flex items-center justify-center active:scale-95 transition-transform"
-                  style={{ backgroundColor: colors.primary }}
-                  onClick={handleReport}
-                >
-                  <Text
-                    className="text-xl font-bold"
-                    style={{ color: colors.theme === 'prince' ? colors.bg : '#FFFFFF' }}
-                  >
-                    {text.report}
-                  </Text>
-                </View>
-              ) : schedule.record?.isReported ? (
-                <View
-                  className="mt-2 rounded-full py-4 px-6 flex items-center justify-center"
-                  style={{ backgroundColor: colors.border }}
-                >
-                  <Text className="text-xl font-bold" style={{ color: colors.textMuted }}>
-                    今日已汇报
-                  </Text>
-                </View>
-              ) : null}
-            </>
-          )}
-        </>
-      ) : null}
-
-      <CelebrationOverlay
-        visible={celebration}
-        onClose={() => setCelebration(false)}
-        message={celebrationMsg}
-        subMessage={startTime ? `用时 ${Math.round((Date.now() - startTime.getTime()) / 60000)} 分钟` : undefined}
-      />
-    </ScrollView>
+        <CelebrationOverlay
+          visible={celebration}
+          onClose={() => setCelebration(false)}
+          message={celebrationMsg}
+          subMessage={startTime ? `用时 ${Math.round((Date.now() - startTime.getTime()) / 60000)} 分钟` : undefined}
+        />
+      </ScrollView>
+    </View>
   );
 }

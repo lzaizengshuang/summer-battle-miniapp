@@ -1,10 +1,11 @@
 import { useState } from 'react';
-import { View, Text, Input, Picker, ScrollView } from '@tarojs/components';
+import { View, Text, Input, Image, Picker, ScrollView } from '@tarojs/components';
 import Taro, { useLoad } from '@tarojs/taro';
 import { useTheme } from '@/utils/theme';
 import { useGlobalStore } from '@/stores/global';
 import { callCloud, showError, showSuccess } from '@/utils/cloud';
 import { getTodayISO, addISODays, eachISODay } from '@/utils/date';
+import { avatarOptions } from '@/config/theme';
 import type { ThemeType, TaskTemplate, Plan, UserProgress, ChildProfile, DayType } from '@/types';
 
 const dayTypeOptions: DayType[] = ['learn', 'rest', 'trip'];
@@ -32,6 +33,7 @@ export default function OnboardingPage() {
   const [step, setStep] = useState(0);
   const [theme, setThemeLocal] = useState<ThemeType>('prince');
   const [name, setName] = useState(profile?.name || '小战士');
+  const [avatar, setAvatar] = useState<string>(profile?.avatarUrl || avatarOptions.prince[0]);
   const [startDate, setStartDate] = useState(getTodayISO());
   const [endDate, setEndDate] = useState(addISODays(getTodayISO(), 60));
   const [tasks, setTasks] = useState<TaskTemplate[]>(defaultTasks);
@@ -148,12 +150,16 @@ export default function OnboardingPage() {
       return;
     }
 
-    // 保存孩子在引导页输入的昵称（云端档案可能还是默认名）
-    if (name.trim() && name.trim() !== currentProfile.name) {
+    // 保存孩子在引导页输入的昵称和头像（云端档案可能还是默认值）
+    if (
+      (name.trim() && name.trim() !== currentProfile.name) ||
+      (avatar && avatar !== currentProfile.avatarUrl)
+    ) {
       try {
         const data = await callCloud<{ profile: ChildProfile }>('updateChildProfile', {
           childId,
-          name: name.trim(),
+          name: name.trim() || undefined,
+          avatarUrl: avatar || undefined,
         });
         currentProfile = data.profile;
         setProfile(data.profile);
@@ -206,17 +212,21 @@ export default function OnboardingPage() {
                 theme === 'prince' ? 'border-4' : ''
               }`}
               style={{
-                backgroundColor: '#141414',
-                borderColor: theme === 'prince' ? '#39FF14' : 'transparent',
+                backgroundColor: '#0B1026',
+                borderColor: theme === 'prince' ? '#A3E635' : 'transparent',
+                borderWidth: '4rpx',
               }}
-              onClick={() => setThemeLocal('prince')}
+              onClick={() => {
+                setThemeLocal('prince');
+                setAvatar(avatarOptions.prince[0]);
+              }}
             >
               <Text className="text-6xl mb-4">🚁</Text>
-              <Text className="text-xl font-bold" style={{ color: '#39FF14' }}>
+              <Text className="text-xl font-bold" style={{ color: '#A3E635' }}>
                 王子
               </Text>
-              <Text className="text-xs mt-2 text-center" style={{ color: '#888888' }}>
-                军事 HUD 风格
+              <Text className="text-xs mt-2 text-center" style={{ color: '#8B94B3' }}>
+                特种兵军事基地
               </Text>
             </View>
             <View
@@ -224,17 +234,21 @@ export default function OnboardingPage() {
                 theme === 'princess' ? 'border-4' : ''
               }`}
               style={{
-                backgroundColor: '#F5DEB3',
-                borderColor: theme === 'princess' ? '#7ED321' : 'transparent',
+                backgroundColor: '#150A2E',
+                borderColor: theme === 'princess' ? '#F472B6' : 'transparent',
+                borderWidth: '4rpx',
               }}
-              onClick={() => setThemeLocal('princess')}
+              onClick={() => {
+                setThemeLocal('princess');
+                setAvatar(avatarOptions.princess[0]);
+              }}
             >
               <Text className="text-6xl mb-4">🏰</Text>
-              <Text className="text-xl font-bold" style={{ color: '#9B59B6' }}>
+              <Text className="text-xl font-bold" style={{ color: '#F472B6' }}>
                 公主
               </Text>
-              <Text className="text-xs mt-2 text-center" style={{ color: '#5D4037' }}>
-                梦幻庄园风格
+              <Text className="text-xs mt-2 text-center" style={{ color: '#A78BFA' }}>
+                梦幻城堡花园
               </Text>
             </View>
           </View>
@@ -250,6 +264,38 @@ export default function OnboardingPage() {
               placeholder="请输入昵称"
               placeholderStyle={`color:${colors.textMuted}`}
             />
+          </View>
+          <View className="mb-2">
+            <Text className="text-sm mb-2" style={{ color: colors.textMuted }}>
+              选择头像
+            </Text>
+            <View className="flex flex-row flex-wrap">
+              {avatarOptions[theme].map((option) => {
+                const selected = avatar === option;
+                return (
+                  <View
+                    key={option}
+                    className="w-1/3 p-1"
+                    onClick={() => setAvatar(option)}
+                  >
+                    <View
+                      className="rounded-3xl p-1"
+                      style={{
+                        borderWidth: selected ? '4rpx' : '2rpx',
+                        borderColor: selected ? colors.primary : colors.border,
+                        backgroundColor: colors.card,
+                      }}
+                    >
+                      <Image
+                        src={option}
+                        mode="aspectFill"
+                        style={{ width: '100%', height: '140rpx', borderRadius: '20rpx' }}
+                      />
+                    </View>
+                  </View>
+                );
+              })}
+            </View>
           </View>
         </View>
       );
@@ -464,7 +510,7 @@ export default function OnboardingPage() {
           >
             <Text
               className="font-bold"
-              style={{ color: colors.theme === 'prince' ? colors.bg : '#FFFFFF' }}
+              style={{ color: colors.bg }}
             >
               下一步
             </Text>
@@ -480,7 +526,7 @@ export default function OnboardingPage() {
           >
             <Text
               className="font-bold"
-              style={{ color: colors.theme === 'prince' ? colors.bg : '#FFFFFF' }}
+              style={{ color: colors.bg }}
             >
               {submitting ? '生成中…' : '生成计划'}
             </Text>

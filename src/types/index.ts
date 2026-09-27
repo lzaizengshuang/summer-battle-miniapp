@@ -89,6 +89,10 @@ export interface MedalDef {
   name: string;
   desc: string;
   icon: string;
+  /** 勋章插画（本地资源），优先于 icon 展示 */
+  image?: string;
+  /** 是否为不透明瓦片图（aspectFill 填充）；false 为透明底 PNG 风格（aspectFit 居中） */
+  tile?: boolean;
 }
 
 export interface RankInfo {

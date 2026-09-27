@@ -225,6 +225,61 @@ function detectMedals(progress, records, plan) {
     if (maxOralStreak >= 10) medals.add('perfect');
   }
 
+  // === 扩展勋章（2026-09） ===
+  const reportedRecords = records.filter(r => r.isReported);
+
+  // 早起标兵：累计 5 天在中午 12 点前汇报
+  const earlyCount = reportedRecords.filter(r => {
+    if (!r.reportedAt) return false;
+    return new Date(r.reportedAt).getHours() < 12;
+  }).length;
+  if (earlyCount >= 5) medals.add('earlybird');
+
+  // 坚持不懈 / 月度尖兵：累计完成学习日
+  const completedDayCount = completedRecords.length;
+  if (completedDayCount >= 7) medals.add('days7');
+  if (completedDayCount >= 30) medals.add('days30');
+
+  // 半程冲锋：完成计划一半以上学习日
+  if (learnDates.length > 0 && completedDayCount >= Math.max(1, Math.floor(learnDates.length / 2))) {
+    medals.add('halfway');
+  }
+
+  // 完美收官：完成计划最后一个学习日
+  const lastLearnDate = learnDates[learnDates.length - 1];
+  if (lastLearnDate && completedRecords.some(r => r.date === lastLearnDate)) {
+    medals.add('finisher');
+  }
+
+  // 卷土重来：中断后重新连续坚持 3 天
+  const streaks = [];
+  let currentStreakRun = 0;
+  for (const date of learnDates) {
+    const record = records.find(r => r.date === date);
+    if (record && record.allCompleted) {
+      currentStreakRun += 1;
+    } else {
+      if (currentStreakRun > 0) streaks.push(currentStreakRun);
+      currentStreakRun = 0;
+    }
+  }
+  if (currentStreakRun > 0) streaks.push(currentStreakRun);
+  if (streaks.length >= 2 && streaks[streaks.length - 1] >= 3) {
+    medals.add('comeback');
+  }
+
+  // 口算之星：口算类任务累计完成 50 次
+  let oralCompleted = 0;
+  for (const record of records) {
+    for (const tr of (record.taskRecords || [])) {
+      if (tr.completed && oralTaskIds.has(tr.taskId)) oralCompleted += 1;
+    }
+  }
+  if (oralCompleted >= 50) medals.add('oral50');
+
+  // 军功显赫：总军功达到 500
+  if ((progress.totalPoints || 0) >= 500) medals.add('rich500');
+
   return Array.from(medals);
 }
 
