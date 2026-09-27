@@ -25,11 +25,23 @@ export default function IndexPage() {
   const [startTime, setStartTime] = useState<Date | null>(null);
 
   useLoad(() => {
-    if (!profile || !plan) {
+    // 冷启动等全局数据就绪再决定去向，避免慢网络下误跳引导页
+    let attempts = 0;
+    const check = () => {
+      const s = useGlobalStore.getState();
+      if (s.profile && s.plan) return; // 数据就绪，由 useEffect 加载日程
+      if (s.profile && !s.plan) {
+        Taro.redirectTo({ url: '/pages/onboarding/index' });
+        return;
+      }
+      if (attempts < 20) {
+        attempts += 1;
+        setTimeout(check, 250);
+        return;
+      }
       Taro.redirectTo({ url: '/pages/onboarding/index' });
-      return;
-    }
-    loadSchedule();
+    };
+    check();
   });
 
   useEffect(() => {

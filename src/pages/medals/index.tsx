@@ -14,11 +14,24 @@ export default function MedalsPage() {
   const setProgress = useGlobalStore((s) => s.setProgress);
 
   useLoad(() => {
-    if (!profile || !plan) {
-      Taro.redirectTo({ url: '/pages/onboarding/index' });
-      return;
-    }
-    loadProgress();
+    // 冷启动等全局数据就绪再加载，避免慢网络下误跳引导页
+    let attempts = 0;
+    const check = () => {
+      const s = useGlobalStore.getState();
+      if (s.profile && s.plan) {
+        loadProgress();
+        return;
+      }
+      if (s.profile && !s.plan) {
+        Taro.redirectTo({ url: '/pages/onboarding/index' });
+        return;
+      }
+      if (attempts < 16) {
+        attempts += 1;
+        setTimeout(check, 250);
+      }
+    };
+    check();
   });
 
   const loadProgress = async () => {

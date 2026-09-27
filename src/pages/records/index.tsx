@@ -20,9 +20,21 @@ export default function RecordsPage() {
   const [records, setRecords] = useState<DayRecord[]>([]);
 
   useLoad(() => {
-    if (!profile || !plan) {
-      Taro.redirectTo({ url: '/pages/onboarding/index' });
-    }
+    // 冷启动等全局数据就绪再判断，避免慢网络下误跳引导页
+    let attempts = 0;
+    const check = () => {
+      const s = useGlobalStore.getState();
+      if (s.profile && s.plan) return; // 数据就绪，由 useEffect 加载记录
+      if (s.profile && !s.plan) {
+        Taro.redirectTo({ url: '/pages/onboarding/index' });
+        return;
+      }
+      if (attempts < 16) {
+        attempts += 1;
+        setTimeout(check, 250);
+      }
+    };
+    check();
   });
 
   useEffect(() => {

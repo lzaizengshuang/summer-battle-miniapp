@@ -47,7 +47,20 @@ export default function OnboardingPage() {
   const [submitting, setSubmitting] = useState(false);
 
   useLoad(() => {
-    // onboarding is the fallback entry
+    // 冷启动时全局数据可能未就绪：若已有计划则返回首页，防止老用户被误带进来重复建计划
+    let attempts = 0;
+    const check = () => {
+      const s = useGlobalStore.getState();
+      if (s.profile && s.plan) {
+        Taro.switchTab({ url: '/pages/index/index' });
+        return;
+      }
+      if (attempts < 16) {
+        attempts += 1;
+        setTimeout(check, 250);
+      }
+    };
+    check();
   });
 
   const updateTask = (idx: number, patch: Partial<TaskTemplate>) => {
@@ -89,9 +102,13 @@ export default function OnboardingPage() {
       dayTypes[date] = type;
     });
 
+    const year = startDate.slice(0, 4);
+    const month = Number(startDate.slice(5, 7));
+    const season = month === 1 || month === 2 ? '寒假' : month >= 7 && month <= 8 ? '暑假' : '假期';
+
     return {
       childId: profile?._id || '',
-      name: `${startDate.slice(0, 4)} 暑假作战`,
+      name: `${year} ${season}作战`,
       startDate,
       endDate,
       tasks,
@@ -102,12 +119,14 @@ export default function OnboardingPage() {
   };
 
   const handleCreate = async () => {
-    if (!profile) {
+    let currentProfile = profile;
+    if (!currentProfile) {
       // ensure default profile with selected theme
       try {
         const data = await callCloud<{ profile: ChildProfile }>('getOrCreateDefaultChildProfile', {
           theme,
         });
+        currentProfile = data.profile;
         setProfile(data.profile);
       } catch (err) {
         showError(err);
@@ -115,7 +134,7 @@ export default function OnboardingPage() {
       }
     }
 
-    const childId = profile?._id || '';
+    const childId = currentProfile._id;
     if (!childId) {
       showError(new Error('缺少孩子档案'));
       return;
@@ -129,8 +148,36 @@ export default function OnboardingPage() {
       return;
     }
 
+    // 保存孩子在引导页输入的昵称（云端档案可能还是默认名）
+    if (name.trim() && name.trim() !== currentProfile.name) {
+      try {
+        const data = await callCloud<{ profile: ChildProfile }>('updateChildProfile', {
+          childId,
+          name: name.trim(),
+        });
+        currentProfile = data.profile;
+        setProfile(data.profile);
+      } catch (err) {
+        showError(err);
+        return;
+      }
+    }
+
     setSubmitting(true);
     try {
+      // 网络慢被误带进引导页时，已有计划则直接返回首页，避免重复建计划
+      const existing = await callCloud<{ plan: Plan | null; progress: UserProgress | null }>(
+        'getCurrentPlan',
+        { childId },
+      );
+      if (existing.plan) {
+        setPlan(existing.plan);
+        if (existing.progress) setProgress(existing.progress);
+        showSuccess('已有进行中的计划');
+        Taro.switchTab({ url: '/pages/index/index' });
+        return;
+      }
+
       const payload = generatePlanPayload();
       payload.childId = childId;
       const result = await callCloud<{ plan: Plan; progress: UserProgress }>('createPlan', payload);

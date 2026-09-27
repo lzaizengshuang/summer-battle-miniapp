@@ -441,6 +441,9 @@ export default function ParentPage() {
 
   const renderBackup = () => (
     <View>
+      <Text className="text-xs mb-3 leading-relaxed" style={{ color: colors.textMuted }}>
+        数据绑定当前登录的微信，换微信登录前请先在旧微信上导出备份。
+      </Text>
       <View
         className="rounded-full py-4 flex items-center justify-center mb-4 active:scale-95 transition-transform"
         style={{ backgroundColor: colors.primary }}
