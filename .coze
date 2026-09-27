@@ -1,0 +1,51 @@
+[project]
+entrypoint = "server.js"
+requires = [ "nodejs-24" ]
+project_type = "miniprogram"
+template = "taro"
+version = "0.1.9"
+appliedPatches = [ ]
+
+[dev]
+build = [ "bash", ".cozeproj/scripts/dev_build.sh" ]
+build_win = [
+  "powershell.exe",
+  "-NoProfile",
+  "-ExecutionPolicy",
+  "Bypass",
+  "-File",
+  ".cozeproj/scripts/dev_build.ps1"
+]
+run = [ "bash", ".cozeproj/scripts/dev_run.sh" ]
+run_win = [
+  "powershell.exe",
+  "-NoProfile",
+  "-ExecutionPolicy",
+  "Bypass",
+  "-File",
+  ".cozeproj/scripts/dev_run.ps1"
+]
+deps = [ "git", "rsync" ]
+pack = [ "bash", ".cozeproj/scripts/pack.sh" ]
+pack_win = [
+  "powershell.exe",
+  "-NoProfile",
+  "-ExecutionPolicy",
+  "Bypass",
+  "-File",
+  ".cozeproj/scripts/pack.ps1"
+]
+validate = [ "bash", ".cozeproj/scripts/validate.sh" ]
+validate_win = [
+  "powershell.exe",
+  "-NoProfile",
+  "-ExecutionPolicy",
+  "Bypass",
+  "-File",
+  ".cozeproj/scripts/validate.ps1"
+]
+
+[deploy]
+build = [ "bash", ".cozeproj/scripts/deploy_build.sh" ]
+run = [ "bash", ".cozeproj/scripts/deploy_run.sh" ]
+deps = [ "git", "rsync" ]
