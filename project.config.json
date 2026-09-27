@@ -1,5 +1,6 @@
 {
   "miniprogramRoot": "./dist",
+  "cloudfunctionRoot": "cloudfunctions/",
   "projectname": "coze-mini-program",
   "description": "test",
   "appid": "touristappid",
