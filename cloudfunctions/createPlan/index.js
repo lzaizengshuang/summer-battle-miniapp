@@ -12,7 +12,8 @@ exports.main = async (event, context) => {
     if (!openid) return fail('UNAUTHORIZED', '无法获取用户 openid');
 
     const {
-      childId, name, startDate, endDate, tasks, dayTypes, weekTemplates, difficulty
+      childId, name, startDate, endDate, tasks, dayTypes, weekTemplates, difficulty,
+      dailyTasks, taskPlanCounts
     } = event;
 
     if (!childId) return fail('INVALID_PARAMS', 'childId 不能为空');
@@ -42,6 +43,31 @@ exports.main = async (event, context) => {
     const now = new Date().toISOString();
     const rankThresholds = generateRankThresholds(startDate, endDate, tasks, difficulty);
 
+    // dailyTasks 为空时按周模板逐日展开兜底，保证旧前端/旧数据兼容
+    let finalDailyTasks = dailyTasks;
+    if (!finalDailyTasks || typeof finalDailyTasks !== 'object' || Object.keys(finalDailyTasks).length === 0) {
+      finalDailyTasks = {};
+      const dates = [];
+      let cur = startDate;
+      while (cur <= endDate) {
+        dates.push(cur);
+        const d = new Date(`${cur}T00:00:00`);
+        d.setDate(d.getDate() + 1);
+        cur = d.toISOString().slice(0, 10);
+      }
+      const allIds = (tasks || []).map((t) => t.id);
+      for (const d of dates) {
+        const type = (dayTypes && dayTypes[d]) || 'learn';
+        if (type !== 'learn') {
+          finalDailyTasks[d] = [];
+          continue;
+        }
+        const weekday = new Date(`${d}T00:00:00`).getDay();
+        const tpl = weekTemplates && weekTemplates[weekday];
+        finalDailyTasks[d] = Array.isArray(tpl) && tpl.length > 0 ? tpl : allIds;
+      }
+    }
+
     const planDoc = {
       _openid: openid,
       childId,
@@ -51,7 +77,8 @@ exports.main = async (event, context) => {
       tasks,
       dayTypes,
       weekTemplates,
-      dailyTasks: {},
+      dailyTasks: finalDailyTasks,
+      taskPlanCounts: taskPlanCounts || {},
       rankThresholds,
       createdAt: now,
       updatedAt: now

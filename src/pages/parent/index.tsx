@@ -64,15 +64,47 @@ export default function ParentPage() {
 
   const loadRecords = async () => {
     if (!profile || !plan) return;
-    const now = new Date();
     try {
-      const data = await callCloud<{ records: DayRecord[] }>('getRecords', {
+      // 拉取整个计划期的记录（跨月逐月查询后合并）
+      const months: Array<{ year: number; month: number }> = [];
+      const seen = new Set<string>();
+      const start = new Date(`${plan.startDate}T00:00:00`);
+      const end = new Date(`${plan.endDate}T00:00:00`);
+      const cursor = new Date(start.getFullYear(), start.getMonth(), 1);
+      while (cursor <= end) {
+        const key = `${cursor.getFullYear()}-${cursor.getMonth()}`;
+        if (!seen.has(key)) {
+          seen.add(key);
+          months.push({ year: cursor.getFullYear(), month: cursor.getMonth() + 1 });
+        }
+        cursor.setMonth(cursor.getMonth() + 1);
+      }
+      const all: DayRecord[] = [];
+      for (const m of months) {
+        const data = await callCloud<{ records: DayRecord[] }>('getRecords', {
+          childId: profile._id,
+          planId: plan._id,
+          year: m.year,
+          month: m.month,
+        });
+        all.push(...data.records);
+      }
+      setRecords(all);
+    } catch (err) {
+      showError(err);
+    }
+  };
+
+  const handleBumpFlex = async (taskId: string, delta: number) => {
+    if (!profile || !plan) return;
+    try {
+      const data = await callCloud<{ progress: UserProgress }>('bumpFlexCount', {
         childId: profile._id,
         planId: plan._id,
-        year: now.getFullYear(),
-        month: now.getMonth() + 1,
+        taskId,
+        delta,
       });
-      setRecords(data.records);
+      setProgress(data.progress);
     } catch (err) {
       showError(err);
     }
@@ -409,6 +441,96 @@ export default function ParentPage() {
         </View>
 
         <Text className="text-lg font-bold mb-3" style={{ color: colors.text }}>
+          任务总量进度
+        </Text>
+        {(plan?.tasks || []).map((task) => {
+          const sch = task.schedule;
+          if (!sch || sch.kind === 'flex') {
+            // 弹性任务目标卡：不进每日打卡，手动累计
+            const total = sch?.totalAmount || 0;
+            const done = progress?.flexDone?.[task.id] || 0;
+            const pct = total > 0 ? Math.min(100, Math.round((done / total) * 100)) : 0;
+            return (
+              <View
+                key={task.id}
+                className="rounded-2xl p-4 mb-3"
+                style={{ backgroundColor: colors.card, borderWidth: '2rpx', borderColor: colors.border }}
+              >
+                <View className="flex flex-row items-center justify-between mb-2">
+                  <Text className="text-sm font-bold" style={{ color: colors.text }}>
+                    {task.icon} {task.name}（弹性备忘）
+                  </Text>
+                  <Text className="text-sm font-bold" style={{ color: colors.gold }}>
+                    {done}/{total} {sch?.unit || ''}
+                  </Text>
+                </View>
+                {task.note ? (
+                  <Text className="text-xs mb-2" style={{ color: colors.textMuted }}>
+                    备注：{task.note}
+                  </Text>
+                ) : null}
+                <View className="flex flex-row items-center">
+                  <View
+                    className="flex-1 h-3 rounded-full mr-3 overflow-hidden"
+                    style={{ backgroundColor: colors.glass || colors.border }}
+                  >
+                    <View
+                      className="h-full rounded-full"
+                      style={{ width: `${pct}%`, backgroundColor: colors.gold }}
+                    />
+                  </View>
+                  <View
+                    className="w-9 h-9 rounded-full flex items-center justify-center active:scale-95"
+                    style={{ backgroundColor: colors.border }}
+                    onClick={() => handleBumpFlex(task.id, -1)}
+                  >
+                    <Text className="text-lg font-bold" style={{ color: colors.text }}>−</Text>
+                  </View>
+                  <View
+                    className="w-9 h-9 rounded-full flex items-center justify-center ml-2 active:scale-95"
+                    style={{ backgroundColor: colors.primary }}
+                    onClick={() => handleBumpFlex(task.id, 1)}
+                  >
+                    <Text className="text-lg font-bold" style={{ color: colors.bg }}>＋</Text>
+                  </View>
+                </View>
+              </View>
+            );
+          }
+          const planned = plan?.taskPlanCounts?.[task.id];
+          if (!planned) return null; // 旧计划没有排程数据，不显示
+          const done = records.reduce(
+            (sum, r) => sum + (r.taskRecords.find((t) => t.taskId === task.id)?.completed ? 1 : 0),
+            0,
+          );
+          const pct = Math.min(100, Math.round((done / planned) * 100));
+          return (
+            <View
+              key={task.id}
+              className="rounded-2xl p-4 mb-3"
+              style={{ backgroundColor: colors.card, borderWidth: '2rpx', borderColor: colors.border }}
+            >
+              <View className="flex flex-row items-center justify-between mb-2">
+                <Text className="text-sm font-bold" style={{ color: colors.text }}>
+                  {task.icon} {task.name}
+                </Text>
+                <Text className="text-sm font-bold" style={{ color: colors.gold }}>
+                  {done}/{planned} 次
+                </Text>
+              </View>
+              {task.note ? (
+                <Text className="text-xs mb-2" style={{ color: colors.textMuted }}>
+                  备注：{task.note}
+                </Text>
+              ) : null}
+              <View className="h-3 rounded-full overflow-hidden" style={{ backgroundColor: colors.glass || colors.border }}>
+                <View className="h-full rounded-full" style={{ width: `${pct}%`, backgroundColor: colors.primary }} />
+              </View>
+            </View>
+          );
+        })}
+
+        <Text className="text-lg font-bold mb-3 mt-4" style={{ color: colors.text }}>
           最近打卡
         </Text>
         {records.slice(-14).map((r) => (
