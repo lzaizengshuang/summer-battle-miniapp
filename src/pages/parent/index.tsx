@@ -293,7 +293,10 @@ export default function ParentPage() {
         className="rounded-3xl p-4 mb-4"
         style={{ backgroundColor: colors.card, borderWidth: '2rpx', borderColor: colors.border }}
       >
-        <View className="flex flex-row items-center mb-3">
+        <View
+          className="flex flex-row items-center mb-3 active:scale-95 transition-transform"
+          onClick={() => setShowAvatarPicker(!showAvatarPicker)}
+        >
           {profile?.avatarUrl ? (
             <Image
               src={profile.avatarUrl}
