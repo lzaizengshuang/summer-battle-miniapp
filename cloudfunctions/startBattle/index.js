@@ -1,5 +1,5 @@
 const cloud = require('wx-server-sdk');
-const { initCloud, getOpenId, success, fail, isValidDate, sanitizeRecordForOutput } = require('./utils');
+const { initCloud, getOpenId, success, fail, isValidDate, sanitizeRecordForOutput, getDayTasks } = require('./utils');
 
 exports.main = async (event, context) => {
   const db = initCloud();
@@ -32,7 +32,8 @@ exports.main = async (event, context) => {
 
     let record;
     if (recordRes.data.length === 0) {
-      const dayTasks = plan.tasks || [];
+      // 只创建当天应做的任务（按排程日历），弹性任务不进每日打卡
+      const dayTasks = getDayTasks(plan, date);
       const addRes = await db.collection('records').add({
         data: {
           _openid: openid,

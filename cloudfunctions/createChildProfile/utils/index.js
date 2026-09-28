@@ -180,9 +180,10 @@ function detectMedals(progress, records, plan) {
   if (maxStreak >= 30) medals.add('streak30');
 
   const allCompletedLearnDays = completedRecords.filter(r => getDayType(plan, r.date) === 'learn');
-  const planTaskCount = (plan.tasks || []).length;
+  // 弹性备忘任务不计入"全部已配置任务"（它不在每日打卡中）
+  const activeTaskCount = (plan.tasks || []).filter(t => !t.schedule || t.schedule.kind !== 'flex').length;
   const allTaskDays = allCompletedLearnDays.filter(r => {
-    if (planTaskCount < 3) return true; // 任务总数不足 3 项时，任意全部完成日解锁
+    if (activeTaskCount < 3) return true; // 任务总数不足 3 项时，任意全部完成日解锁
     const dayTasks = getDayTasks(plan, r.date);
     return dayTasks.length >= 3;
   });
