@@ -30,12 +30,7 @@
   },
   "compileType": "miniprogram",
   "packOptions": {
-    "ignore": [
-      {
-        "value": "./assets",
-        "type": "folder"
-      }
-    ],
+    "ignore": [],
     "include": []
   },
   "simulatorPluginLibVersion": {},

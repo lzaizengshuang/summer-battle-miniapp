@@ -47,7 +47,7 @@ export const TaskCard = ({ task, onToggle, disabled }: TaskCardProps) => {
         <Text>{task.icon || '📝'}</Text>
       </View>
 
-      <View className="flex-1">
+      <View className="flex-1 flex flex-col">
         <Text
           className="text-lg font-bold"
           style={{
