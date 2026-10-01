@@ -4,9 +4,10 @@
 @import url('weapp-tailwindcss');
 
 /* 小程序页面容器高度设置，确保垂直居中生效 */
+/* width 用 100vw 而非 100%：iOS 上文档宽度偶发被算窄，100vw 锚定视口宽，防止内容整体靠左露出右缘 */
 page {
   height: 100%;
-  width: 100%;
+  width: 100vw;
   overflow-x: hidden;
 }
 
