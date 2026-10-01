@@ -5,9 +5,13 @@ import { ChevronLeft, ChevronRight, CircleCheck, Circle } from 'lucide-react-tar
 import { useTheme } from '@/utils/theme';
 import { useGlobalStore } from '@/stores/global';
 import { Calendar } from '@/components/Calendar';
+import { CelebrationOverlay } from '@/components/CelebrationOverlay';
 import { callCloud, showError } from '@/utils/cloud';
 import { formatDateCN, getTodayISO, clampDate } from '@/utils/date';
 import type { DayRecord, DayType } from '@/types';
+
+// 每次启动小程序只撒一次花，切换月份不重复弹
+let confettiShown = false;
 
 export default function RecordsPage() {
   const { colors, theme } = useTheme();
@@ -19,6 +23,7 @@ export default function RecordsPage() {
   const [month, setMonth] = useState(now.getMonth() + 1);
   const [selectedDate, setSelectedDate] = useState<string>(getTodayISO());
   const [records, setRecords] = useState<DayRecord[]>([]);
+  const [celebration, setCelebration] = useState(false);
 
   useLoad(() => {
     // 冷启动等全局数据就绪再判断，避免慢网络下误跳引导页
@@ -60,6 +65,20 @@ export default function RecordsPage() {
         month,
       });
       setRecords(data.records);
+      // 今天已汇报且全部完成：撒花庆祝一次
+      if (!confettiShown) {
+        const today = getTodayISO();
+        const todayRecord = data.records.find((r) => r.date === today);
+        if (
+          todayRecord &&
+          todayRecord.isReported &&
+          todayRecord.taskRecords.length > 0 &&
+          todayRecord.taskRecords.every((t) => t.completed)
+        ) {
+          confettiShown = true;
+          setCelebration(true);
+        }
+      }
     } catch (err) {
       showError(err);
     }
@@ -96,6 +115,12 @@ export default function RecordsPage() {
 
   const selectedRecord = records.find((r) => r.date === selectedDate);
   const dayType: DayType = plan.dayTypes[selectedDate] || 'learn';
+
+  const reportedDays = records.filter((r) => r.isReported);
+  const fullDays = reportedDays.filter(
+    (r) => r.taskRecords.length > 0 && r.taskRecords.every((t) => t.completed),
+  ).length;
+  const monthPoints = reportedDays.reduce((sum, r) => sum + (r.totalPoints || 0), 0);
 
   const fmtDuration = (tr: DayRecord['taskRecords'][number]) => {
     if (!tr.startTime || !tr.endTime) return null;
@@ -159,6 +184,44 @@ export default function RecordsPage() {
         selectedDate={selectedDate}
         onSelect={(d) => setSelectedDate(clampDate(d, plan.startDate, plan.endDate))}
       />
+
+      <View
+        className="flex flex-row items-center justify-between rounded-3xl px-4 py-3 mt-4"
+        style={{ backgroundColor: colors.card, borderWidth: '2rpx', borderColor: colors.border }}
+      >
+        <View className="flex flex-col items-center flex-1">
+          <Text className="text-lg font-bold" style={{ color: colors.gold }}>
+            {reportedDays.length}
+          </Text>
+          <Text className="text-xs" style={{ color: colors.textMuted }}>
+            已打卡
+          </Text>
+        </View>
+        <View
+          className="w-0 h-8 mx-2"
+          style={{ borderLeftWidth: '2rpx', borderColor: colors.border }}
+        />
+        <View className="flex flex-col items-center flex-1">
+          <Text className="text-lg font-bold" style={{ color: colors.gold }}>
+            {fullDays}
+          </Text>
+          <Text className="text-xs" style={{ color: colors.textMuted }}>
+            全勤
+          </Text>
+        </View>
+        <View
+          className="w-0 h-8 mx-2"
+          style={{ borderLeftWidth: '2rpx', borderColor: colors.border }}
+        />
+        <View className="flex flex-col items-center flex-1">
+          <Text className="text-lg font-bold" style={{ color: colors.gold }}>
+            {monthPoints}
+          </Text>
+          <Text className="text-xs" style={{ color: colors.textMuted }}>
+            获得{theme === 'prince' ? '军功' : '爱心值'}
+          </Text>
+        </View>
+      </View>
 
       <View
         className="rounded-3xl p-4 mt-4"
@@ -233,6 +296,12 @@ export default function RecordsPage() {
         ))}
       </View>
       </ScrollView>
+      <CelebrationOverlay
+        visible={celebration}
+        onClose={() => setCelebration(false)}
+        message="今日任务全部完成！"
+        subMessage="去记录页看看你的战绩吧"
+      />
     </View>
   );
 }
