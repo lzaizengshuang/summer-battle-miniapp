@@ -69,11 +69,8 @@ export default function RanksPage() {
   const thresholds = plan.rankThresholds;
 
   return (
-    <ScrollView
-      className="w-full min-h-full px-4 py-4"
-      style={{ backgroundColor: colors.bg }}
-      scrollY
-    >
+    <View className="w-full min-h-full overflow-hidden" style={{ backgroundColor: colors.bg }}>
+      <ScrollView className="w-full min-h-full px-4 py-4" scrollY>
       <Text className="text-2xl font-bold mb-4 text-center" style={{ color: colors.text }}>
         {colors.theme === 'prince' ? '军衔阶梯' : '公主成长阶梯'}
       </Text>
@@ -165,6 +162,7 @@ export default function RanksPage() {
           );
         })}
       </View>
-    </ScrollView>
+      </ScrollView>
+    </View>
   );
 }

@@ -724,11 +724,8 @@ export default function ParentPage() {
   };
 
   return (
-    <ScrollView
-      className="w-full min-h-full"
-      style={{ backgroundColor: colors.bg }}
-      scrollY
-    >
+    <View className="w-full min-h-full overflow-hidden" style={{ backgroundColor: colors.bg }}>
+      <ScrollView className="w-full min-h-full" scrollY>
       <View
         className="flex flex-row items-center justify-around px-2 py-3 sticky top-0 z-10"
         style={{ backgroundColor: colors.card, borderBottomWidth: '2rpx', borderColor: colors.border }}
@@ -755,6 +752,7 @@ export default function ParentPage() {
       </View>
 
       <View className="px-4 py-4">{renderContent()}</View>
-    </ScrollView>
+      </ScrollView>
+    </View>
   );
 }

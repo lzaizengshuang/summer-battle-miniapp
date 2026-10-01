@@ -864,11 +864,8 @@ export default function OnboardingPage() {
   };
 
   return (
-    <ScrollView
-      className="w-full min-h-full px-4 py-6"
-      style={{ backgroundColor: colors.bg }}
-      scrollY
-    >
+    <View className="w-full min-h-full overflow-hidden" style={{ backgroundColor: colors.bg }}>
+      <ScrollView className="w-full min-h-full px-4 py-6" scrollY>
       <View className="flex flex-row items-center justify-center mb-6">
         {[0, 1, 2, 3, 4].map((i) => (
           <View
@@ -919,6 +916,7 @@ export default function OnboardingPage() {
         )}
       </View>
       <View className="h-8" />
-    </ScrollView>
+      </ScrollView>
+    </View>
   );
 }
