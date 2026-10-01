@@ -183,16 +183,13 @@ export default function IndexPage() {
         <Image
           src={colors.bgImage}
           mode="aspectFill"
-          className="absolute top-0 left-0 w-full"
-          style={{ height: '100%' }}
+          style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, zIndex: 0, opacity: 0.5 }}
         />
       ) : null}
 
       <ScrollView
-        className="relative z-10 min-h-full px-4 py-4"
+        className="relative z-10 w-full min-h-full px-4 py-4"
         scrollY
-        refresherEnabled
-        onRefresherRefresh={loadSchedule}
       >
         <DateNavigator
           date={date}
