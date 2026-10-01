@@ -143,6 +143,15 @@ export default function OnboardingPage() {
     setTasks((prev) => prev.map((t, i) => (i === idx ? { ...t, ...patch } : t)));
   };
 
+  // 任务颜色预设，点色块循环切换，避免暴露内部色值
+  const COLOR_PRESETS = ['#4A90E2', '#F5A623', '#7ED321', '#9B59B6', '#E74C3C', '#1ABC9C', '#F472B6', '#A78BFA'];
+  const cycleColor = (idx: number) => {
+    const cur = tasks[idx]?.color || '';
+    const pos = COLOR_PRESETS.indexOf(cur.toUpperCase());
+    const next = pos >= 0 ? COLOR_PRESETS[(pos + 1) % COLOR_PRESETS.length] : COLOR_PRESETS[0];
+    updateTask(idx, { color: next });
+  };
+
   const updateSchedule = (idx: number, patch: Partial<TaskSchedule>) => {
     setTasks((prev) =>
       prev.map((t, i) => (i === idx ? { ...t, schedule: { ...(t.schedule || mkSchedule('daily')), ...patch } } : t)),
@@ -608,9 +617,18 @@ export default function OnboardingPage() {
             return (
               <View
                 key={task.id}
-                className="rounded-3xl p-4 mb-4"
-                style={{ backgroundColor: colors.card, borderWidth: '2rpx', borderColor: colors.border }}
+                className="rounded-3xl p-4 mb-6"
+                style={{
+                  backgroundColor: colors.card,
+                  borderWidth: '2rpx',
+                  borderColor: colors.border,
+                  borderLeftWidth: '10rpx',
+                  borderLeftColor: task.color,
+                }}
               >
+                <Text className="text-xs mb-2" style={{ color: colors.textMuted }}>
+                  任务 {idx + 1}
+                </Text>
                 <View className="flex flex-row items-center mb-2">
                   <View
                     className="flex-1 rounded-xl px-3 py-2 mr-2"
@@ -789,22 +807,13 @@ export default function OnboardingPage() {
                     />
                   </View>
                   <View
-                    className="flex-1 rounded-xl px-3 py-2 mr-2"
-                    style={{ backgroundColor: colors.bg }}
-                  >
-                    <Input
-                      className="w-full bg-transparent px-0"
-                      style={{ color: colors.text }}
-                      value={task.color}
-                      onInput={(e) => updateTask(idx, { color: e.detail.value })}
-                      placeholder="颜色 #HEX"
-                      placeholderStyle={`color:${colors.textMuted}`}
-                    />
-                  </View>
-                  <View
-                    className="w-10 h-10 rounded-xl"
-                    style={{ backgroundColor: task.color }}
+                    className="w-10 h-10 rounded-xl mr-3 active:scale-95 transition-transform"
+                    style={{ backgroundColor: task.color, borderWidth: '2rpx', borderColor: colors.border }}
+                    onClick={() => cycleColor(idx)}
                   />
+                  <Text className="text-xs flex-1" style={{ color: colors.textMuted }}>
+                    点色块切换任务颜色
+                  </Text>
                 </View>
               </View>
             );
@@ -854,7 +863,7 @@ export default function OnboardingPage() {
 
   return (
     <ScrollView
-      className="min-h-full px-4 py-6"
+      className="w-full min-h-full px-4 py-6"
       style={{ backgroundColor: colors.bg }}
       scrollY
     >

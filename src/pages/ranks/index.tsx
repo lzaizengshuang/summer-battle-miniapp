@@ -57,7 +57,7 @@ export default function RanksPage() {
   if (!plan || !progress) {
     return (
       <View
-        className="min-h-full flex items-center justify-center px-4"
+        className="w-full min-h-full flex items-center justify-center px-4"
         style={{ backgroundColor: colors.bg }}
       >
         <Text style={{ color: colors.textMuted }}>加载中…</Text>
@@ -70,7 +70,7 @@ export default function RanksPage() {
 
   return (
     <ScrollView
-      className="min-h-full px-4 py-4"
+      className="w-full min-h-full px-4 py-4"
       style={{ backgroundColor: colors.bg }}
       scrollY
     >

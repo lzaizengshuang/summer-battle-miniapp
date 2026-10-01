@@ -178,7 +178,7 @@ export default function IndexPage() {
   const cardBg = colors.glass || colors.card;
 
   return (
-    <View className="relative min-h-full" style={{ backgroundColor: colors.bg }}>
+    <View className="relative w-full min-h-full" style={{ backgroundColor: colors.bg }}>
       {colors.bgImage ? (
         <Image
           src={colors.bgImage}

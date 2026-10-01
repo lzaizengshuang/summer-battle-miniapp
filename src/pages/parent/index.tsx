@@ -765,7 +765,7 @@ export default function ParentPage() {
 
   return (
     <ScrollView
-      className="min-h-full"
+      className="w-full min-h-full"
       style={{ backgroundColor: colors.bg }}
       scrollY
     >

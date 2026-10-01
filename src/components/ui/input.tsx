@@ -10,7 +10,7 @@ export interface InputProps
 }
 
 const Input = React.forwardRef<React.ElementRef<typeof TaroInput>, InputProps>(
-  ({ className, type, autoFocus, focus, onFocus, onBlur, ...props }, ref) => {
+  ({ className, type, autoFocus, focus, onFocus, onBlur, style, ...props }, ref) => {
     const [isFocused, setIsFocused] = React.useState(false)
     const disabled = !!(props as any).disabled
 
@@ -33,8 +33,10 @@ const Input = React.forwardRef<React.ElementRef<typeof TaroInput>, InputProps>(
       >
         <TaroInput
           type={type}
-          className="w-full flex-1 bg-transparent text-sm text-foreground focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 selection:bg-selection selection:text-selection-foreground"
+          className="w-full flex-1 text-sm text-foreground focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 selection:bg-selection selection:text-selection-foreground"
           placeholderClass="text-muted-foreground"
+          // iOS 真机上原生 Input 默认白底且浮于最上层，必须内联透明背景，className 不可靠
+          style={{ backgroundColor: 'transparent', ...(style as React.CSSProperties) }}
           ref={ref}
           focus={autoFocus || focus}
           onFocus={(e) => {

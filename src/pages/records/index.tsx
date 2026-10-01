@@ -105,7 +105,7 @@ export default function RecordsPage() {
   if (!plan) {
     return (
       <View
-        className="min-h-full flex items-center justify-center px-4"
+        className="w-full min-h-full flex items-center justify-center px-4"
         style={{ backgroundColor: colors.bg }}
       >
         <Text style={{ color: colors.textMuted }}>加载中…</Text>
@@ -140,7 +140,7 @@ export default function RecordsPage() {
   ];
 
   return (
-    <View className="min-h-full" style={{ backgroundColor: colors.bg }}>
+    <View className="w-full min-h-full" style={{ backgroundColor: colors.bg }}>
       {colors.bgImage ? (
         <Image
           src={colors.bgImage}
@@ -149,7 +149,7 @@ export default function RecordsPage() {
         />
       ) : null}
       <ScrollView
-        className="min-h-full px-4 py-4"
+        className="w-full min-h-full px-4 py-4"
         style={{ position: 'relative', zIndex: 1 }}
         scrollY
       >

@@ -48,8 +48,8 @@ export const CelebrationOverlay = ({
 
   const medalImg =
     theme === 'prince'
-      ? '/assets/prince/celebrate-medal.webp'
-      : '/assets/princess/celebrate-medal.webp';
+      ? '/assets/prince/celebrate-medal.png'
+      : '/assets/princess/celebrate-medal.png';
   const btnTextColor = theme === 'prince' ? '#0B1026' : '#150A2E';
 
   return (

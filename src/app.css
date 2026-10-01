@@ -6,6 +6,8 @@
 /* 小程序页面容器高度设置，确保垂直居中生效 */
 page {
   height: 100%;
+  width: 100%;
+  overflow-x: hidden;
 }
 
 :root,

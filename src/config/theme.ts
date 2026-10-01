@@ -32,7 +32,7 @@ export const themeColors: Record<ThemeType, ThemeColors> = {
     accent: '#38BDF8',
     success: '#A3E635',
     danger: '#F87171',
-    bgImage: '/assets/prince/bg-night.webp',
+    bgImage: '/assets/prince/bg-night.jpg',
   },
   princess: {
     theme: 'princess',
@@ -47,7 +47,7 @@ export const themeColors: Record<ThemeType, ThemeColors> = {
     accent: '#C084FC',
     success: '#34D399',
     danger: '#F87171',
-    bgImage: '/assets/princess/bg-night.webp',
+    bgImage: '/assets/princess/bg-night.jpg',
   },
 };
 
@@ -109,26 +109,26 @@ const medalMeta: Array<{ id: string; name: string; desc: string; icon: string }>
 /** 各主题勋章图：老 7 枚王子为透明底，其余为不透明瓦片（tile） */
 const medalImages: Record<ThemeType, Record<string, { src: string; tile: boolean }>> = {
   prince: {
-    first: { src: '/assets/prince/medals/first.webp', tile: false },
-    streak7: { src: '/assets/prince/medals/streak7.webp', tile: false },
-    streak14: { src: '/assets/prince/medals/streak14.webp', tile: false },
-    streak30: { src: '/assets/prince/medals/streak30.webp', tile: false },
-    all6: { src: '/assets/prince/medals/all6.webp', tile: false },
-    fast: { src: '/assets/prince/medals/fast.webp', tile: false },
-    perfect: { src: '/assets/prince/medals/perfect.webp', tile: false },
-    earlybird: { src: '/assets/prince/medals/earlybird.webp', tile: true },
-    days7: { src: '/assets/prince/medals/days7.webp', tile: true },
-    days30: { src: '/assets/prince/medals/days30.webp', tile: true },
-    halfway: { src: '/assets/prince/medals/halfway.webp', tile: true },
-    finisher: { src: '/assets/prince/medals/finisher.webp', tile: true },
-    comeback: { src: '/assets/prince/medals/comeback.webp', tile: true },
-    oral50: { src: '/assets/prince/medals/oral50.webp', tile: true },
-    rich500: { src: '/assets/prince/medals/rich500.webp', tile: true },
+    first: { src: '/assets/prince/medals/first.png', tile: false },
+    streak7: { src: '/assets/prince/medals/streak7.png', tile: false },
+    streak14: { src: '/assets/prince/medals/streak14.png', tile: false },
+    streak30: { src: '/assets/prince/medals/streak30.png', tile: false },
+    all6: { src: '/assets/prince/medals/all6.png', tile: false },
+    fast: { src: '/assets/prince/medals/fast.png', tile: false },
+    perfect: { src: '/assets/prince/medals/perfect.png', tile: false },
+    earlybird: { src: '/assets/prince/medals/earlybird.jpg', tile: true },
+    days7: { src: '/assets/prince/medals/days7.jpg', tile: true },
+    days30: { src: '/assets/prince/medals/days30.jpg', tile: true },
+    halfway: { src: '/assets/prince/medals/halfway.jpg', tile: true },
+    finisher: { src: '/assets/prince/medals/finisher.jpg', tile: true },
+    comeback: { src: '/assets/prince/medals/comeback.jpg', tile: true },
+    oral50: { src: '/assets/prince/medals/oral50.jpg', tile: true },
+    rich500: { src: '/assets/prince/medals/rich500.jpg', tile: true },
   },
   princess: Object.fromEntries(
     ['first', 'streak7', 'streak14', 'streak30', 'all6', 'fast', 'perfect',
      'earlybird', 'days7', 'days30', 'halfway', 'finisher', 'comeback', 'oral50', 'rich500']
-      .map((id) => [id, { src: `/assets/princess/medals/${id}.webp`, tile: true }]),
+      .map((id) => [id, { src: `/assets/princess/medals/${id}.jpg`, tile: true }]),
   ) as Record<string, { src: string; tile: boolean }>,
 };
 
@@ -139,14 +139,14 @@ export const medalDefs: Record<ThemeType, MedalDef[]> = {
 
 /** 15 级军衔徽章（随等级递进：青铜→白银→黄金→元帅） */
 export const rankEmblems: Record<ThemeType, string[]> = {
-  prince: Array.from({ length: 15 }, (_, i) => `/assets/prince/ranks/r${String(i + 1).padStart(2, '0')}.webp`),
-  princess: Array.from({ length: 15 }, (_, i) => `/assets/princess/ranks/r${String(i + 1).padStart(2, '0')}.webp`),
+  prince: Array.from({ length: 15 }, (_, i) => `/assets/prince/ranks/r${String(i + 1).padStart(2, '0')}.jpg`),
+  princess: Array.from({ length: 15 }, (_, i) => `/assets/princess/ranks/r${String(i + 1).padStart(2, '0')}.jpg`),
 };
 
 /** 孩子头像候选（创建档案时选择） */
 export const avatarOptions: Record<ThemeType, string[]> = {
-  prince: Array.from({ length: 6 }, (_, i) => `/assets/prince/avatars/a${i + 1}.webp`),
-  princess: Array.from({ length: 6 }, (_, i) => `/assets/princess/avatars/a${i + 1}.webp`),
+  prince: Array.from({ length: 6 }, (_, i) => `/assets/prince/avatars/a${i + 1}.jpg`),
+  princess: Array.from({ length: 6 }, (_, i) => `/assets/princess/avatars/a${i + 1}.jpg`),
 };
 
 export const themeText: Record<
