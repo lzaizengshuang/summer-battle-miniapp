@@ -140,12 +140,12 @@ export default function RecordsPage() {
   ];
 
   return (
-    <View className="w-full min-h-full" style={{ backgroundColor: colors.bg }}>
+    <View className="w-full min-h-full overflow-hidden" style={{ backgroundColor: colors.bg }}>
       {colors.bgImage ? (
         <Image
           src={colors.bgImage}
           mode="aspectFill"
-          style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, zIndex: 0, opacity: 0.5 }}
+          style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', zIndex: 0, opacity: 0.5 }}
         />
       ) : null}
       <ScrollView
