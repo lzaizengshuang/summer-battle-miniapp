@@ -60,7 +60,7 @@ export default function OnboardingPage() {
   const setProgress = useGlobalStore((s) => s.setProgress);
 
   const [step, setStep] = useState(0);
-  const [theme, setThemeLocal] = useState<ThemeType>('prince');
+  const [theme, setThemeLocal] = useState<ThemeType>(profile?.theme || 'prince');
   const [name, setName] = useState(profile?.name || '小战士');
   const [avatar, setAvatar] = useState<string>(profile?.avatarUrl || avatarOptions.prince[0]);
   const [startDate, setStartDate] = useState(getTodayISO());
@@ -364,6 +364,7 @@ export default function OnboardingPage() {
               }}
               onClick={() => {
                 setThemeLocal('prince');
+                setTheme('prince');
                 setAvatar(avatarOptions.prince[0]);
               }}
             >
@@ -384,6 +385,7 @@ export default function OnboardingPage() {
               }}
               onClick={() => {
                 setThemeLocal('princess');
+                setTheme('princess');
                 setAvatar(avatarOptions.princess[0]);
               }}
             >
