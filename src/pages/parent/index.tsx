@@ -14,7 +14,6 @@ import type {
   UserProgress,
   DaySchedule,
   DayRecord,
-  ThemeType,
 } from '@/types';
 
 const tabs = [
@@ -138,21 +137,6 @@ export default function ParentPage() {
       });
       setProfiles((prev) => [...prev, data.profile]);
       showSuccess('创建成功');
-    } catch (err) {
-      showError(err);
-    }
-  };
-
-  const handleThemeToggle = async (theme: ThemeType) => {
-    if (!profile) return;
-    try {
-      const data = await callCloud<{ profile: ChildProfile }>('updateChildProfile', {
-        childId: profile._id,
-        theme,
-      });
-      setTheme(theme);
-      setProfile(data.profile);
-      showSuccess('主题已保存');
     } catch (err) {
       showError(err);
     }
@@ -340,30 +324,6 @@ export default function ParentPage() {
             ))}
           </View>
         ) : null}
-      </View>
-
-      <Text className="text-lg font-bold mb-3" style={{ color: colors.text }}>
-        切换主题（本地预览）
-      </Text>
-      <View className="flex flex-row mb-4">
-        <View
-          className="flex-1 mr-2 rounded-2xl py-3 flex items-center justify-center active:scale-95"
-          style={{
-            backgroundColor: colors.theme === 'prince' ? colors.primary : colors.border,
-          }}
-          onClick={() => handleThemeToggle('prince')}
-        >
-          <Text style={{ color: colors.text }}>王子</Text>
-        </View>
-        <View
-          className="flex-1 ml-2 rounded-2xl py-3 flex items-center justify-center active:scale-95"
-          style={{
-            backgroundColor: colors.theme === 'princess' ? colors.primary : colors.border,
-          }}
-          onClick={() => handleThemeToggle('princess')}
-        >
-          <Text style={{ color: colors.text }}>公主</Text>
-        </View>
       </View>
 
       <Text className="text-lg font-bold mb-3" style={{ color: colors.text }}>
