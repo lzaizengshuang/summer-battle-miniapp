@@ -1,5 +1,5 @@
 import { PropsWithChildren, useEffect } from 'react';
-import { useLaunch } from '@tarojs/taro';
+import Taro, { useLaunch } from '@tarojs/taro';
 import '@/app.css';
 import { Toaster } from '@/components/ui/toast';
 import { ThemeProvider } from '@/utils/theme';
@@ -36,7 +36,25 @@ const Bootstrap = ({ children }: PropsWithChildren) => {
   }, [setProfile, setPlan, setProgress, setTheme]);
 
   useLaunch(() => {
-    // lifecycle hook preserved
+    // 调试：打印微信认定的窗口尺寸，真机 vConsole Log 里搜 DEBUG-WIN
+    try {
+      const info = Taro.getWindowInfo
+        ? Taro.getWindowInfo()
+        : Taro.getSystemInfoSync();
+      console.log(
+        'DEBUG-WIN',
+        JSON.stringify({
+          windowWidth: info.windowWidth,
+          screenWidth: info.screenWidth,
+          pixelRatio: info.pixelRatio,
+          safeAreaLeft: info.safeArea?.left,
+          safeAreaRight: info.safeArea?.right,
+          screenHeight: info.screenHeight,
+        }),
+      );
+    } catch (err) {
+      console.log('DEBUG-WIN error', err);
+    }
   });
 
   return <>{children}</>;

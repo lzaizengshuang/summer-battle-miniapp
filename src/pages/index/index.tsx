@@ -190,6 +190,7 @@ export default function IndexPage() {
       <ScrollView
         className="relative z-10 w-full min-h-full px-4 py-4"
         scrollY
+        showScrollbar={false}
       >
         <DateNavigator
           date={date}

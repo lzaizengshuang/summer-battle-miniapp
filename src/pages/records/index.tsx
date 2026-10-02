@@ -152,6 +152,7 @@ export default function RecordsPage() {
         className="w-full min-h-full px-4 py-4"
         style={{ position: 'relative', zIndex: 1 }}
         scrollY
+        showScrollbar={false}
       >
       <View
         className="flex flex-row items-center justify-between rounded-3xl px-4 py-4 mb-4"

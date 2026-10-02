@@ -67,7 +67,7 @@ export default function MedalsPage() {
 
   return (
     <View className="w-full min-h-full overflow-hidden" style={{ backgroundColor: colors.bg }}>
-      <ScrollView className="w-full min-h-full px-4 py-4" scrollY>
+      <ScrollView className="w-full min-h-full px-4 py-4" scrollY showScrollbar={false}>
       <Text className="text-2xl font-bold mb-2 text-center" style={{ color: colors.text }}>
         荣誉墙
       </Text>
