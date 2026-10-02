@@ -1,11 +1,19 @@
 const cloud = require('wx-server-sdk');
-const { success, fail } = require('./utils');
+const { success, fail, getOpenId } = require('./utils');
 
 cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV });
 const db = cloud.database();
 
+// 仅允许名单内的 openid 执行初始化，防止普通用户反复触发
+const ADMIN_OPENIDS = [];
+
 exports.main = async (event, context) => {
   try {
+    const openid = getOpenId();
+    if (!openid || !ADMIN_OPENIDS.includes(openid)) {
+      return fail('UNAUTHORIZED', '无权限执行初始化');
+    }
+
     const collections = [
       { name: 'childProfiles', indexes: [
         { name: '_openid_isDefault', keys: { _openid: 1, isDefault: 1 } },

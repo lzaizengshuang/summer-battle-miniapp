@@ -16,6 +16,12 @@ exports.main = async (event) => {
     const d = Math.sign(Number(delta) || 0);
     if (d === 0) return fail('INVALID_PARAMS', 'delta 必须为 ±1');
 
+    const planRes = await db.collection('plans')
+      .where({ _openid: openid, _id: planId, childId })
+      .limit(1)
+      .get();
+    if (planRes.data.length === 0) return fail('NOT_FOUND', '找不到指定的计划');
+
     const now = new Date().toISOString();
     const res = await db.collection('progress')
       .where({ _openid: openid, childId, planId })
