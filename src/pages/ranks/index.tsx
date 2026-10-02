@@ -32,23 +32,6 @@ export default function RanksPage() {
       }
     };
     check();
-    // 调试：量布局真实尺寸，真机 vConsole Log 里搜 DEBUG-LAYOUT
-    setTimeout(() => {
-      Taro.createSelectorQuery()
-        .select('.debug-sv')
-        .boundingClientRect()
-        .select('.debug-row-even')
-        .boundingClientRect()
-        .select('.debug-badge-even')
-        .boundingClientRect()
-        .select('.debug-card-even')
-        .boundingClientRect()
-        .select('.debug-root')
-        .boundingClientRect()
-        .exec((res) => {
-          console.log('DEBUG-LAYOUT', JSON.stringify(res));
-        });
-    }, 1500);
   });
 
   useShareAppMessage(() => ({
@@ -86,8 +69,8 @@ export default function RanksPage() {
   const thresholds = plan.rankThresholds;
 
   return (
-    <View className="w-full min-h-full overflow-hidden debug-root" style={{ backgroundColor: colors.bg }}>
-      <ScrollView className="w-full min-h-full px-4 py-4 box-border debug-sv" scrollY showScrollbar={false}>
+    <View className="w-full min-h-full overflow-hidden" style={{ backgroundColor: colors.bg }}>
+      <ScrollView className="w-full min-h-full px-4 py-4 box-border" scrollY showScrollbar={false}>
       <Text className="text-2xl font-bold mb-4 text-center" style={{ color: colors.text }}>
         {colors.theme === 'prince' ? '军衔阶梯' : '公主成长阶梯'}
       </Text>
@@ -114,10 +97,10 @@ export default function RanksPage() {
           return (
             <View
               key={rank}
-              className={`flex flex-row items-center mb-4 ${isEven ? 'flex-row-reverse' : ''} ${isEven ? 'debug-row-even' : ''}`}
+              className={`flex flex-row items-center mb-4 ${isEven ? 'flex-row-reverse' : ''}`}
             >
               <View
-                className={`relative w-20 h-20 rounded-full flex items-center justify-center z-10 ${isEven ? 'debug-badge-even' : ''}`}
+                className="relative w-20 h-20 rounded-full flex items-center justify-center z-10"
                 style={{
                   backgroundColor: 'transparent',
                   borderWidth: '4rpx',
@@ -145,7 +128,7 @@ export default function RanksPage() {
               </View>
 
               <View
-                className={`flex-1 mx-4 rounded-3xl p-4 ${isEven ? 'debug-card-even' : ''}`}
+                className="flex-1 mx-4 rounded-3xl p-4"
                 style={{
                   backgroundColor: colors.card,
                   borderWidth: '4rpx',
