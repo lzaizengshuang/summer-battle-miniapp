@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { View, Text, ScrollView, Image } from '@tarojs/components';
-import Taro, { useLoad, useShareAppMessage } from '@tarojs/taro';
+import Taro, { useLoad, useDidShow, useShareAppMessage } from '@tarojs/taro';
 import { ChevronLeft, ChevronRight, CircleCheck, Circle } from 'lucide-react-taro';
 import { useTheme } from '@/utils/theme';
 import { useGlobalStore } from '@/stores/global';
@@ -54,6 +54,13 @@ export default function RecordsPage() {
     if (!profile || !plan) return;
     loadRecords();
   }, [year, month, profile, plan]);
+
+  // tabBar 页面不卸载：每次切回记录页都重新拉取，保证刚汇报的数据及时同步
+  useDidShow(() => {
+    const s = useGlobalStore.getState();
+    if (!s.profile || !s.plan) return;
+    loadRecords();
+  });
 
   const loadRecords = async () => {
     if (!profile || !plan) return;

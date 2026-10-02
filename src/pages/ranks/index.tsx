@@ -98,6 +98,7 @@ export default function RanksPage() {
           const threshold = thresholds[idx] ?? 0;
           const isUnlocked = rank <= currentRank;
           const isCurrent = rank === currentRank;
+          const isPassed = rank < currentRank;
           const isEven = rank % 2 === 0;
           const nextThreshold = thresholds[rank] ?? threshold + 100;
           const segmentProgress = isCurrent
@@ -116,13 +117,15 @@ export default function RanksPage() {
               className={`flex flex-row items-center mb-4 ${isEven ? 'flex-row-reverse' : ''} ${isEven ? 'debug-row-even' : ''}`}
             >
               <View
-                className={`w-20 h-20 rounded-full flex items-center justify-center z-10 ${isEven ? 'debug-badge-even' : ''}`}
+                className={`relative w-20 h-20 rounded-full flex items-center justify-center z-10 ${isEven ? 'debug-badge-even' : ''}`}
                 style={{
                   backgroundColor: 'transparent',
                   borderWidth: '4rpx',
-                  borderColor: isCurrent ? colors.gold : colors.border,
+                  borderColor: isCurrent ? colors.gold : isPassed ? colors.primary : colors.border,
                   boxShadow: isCurrent ? `0 0 30rpx ${colors.gold}` : 'none',
                   overflow: 'hidden',
+                  opacity: isUnlocked ? 1 : 0.4,
+                  filter: isUnlocked ? 'none' : 'grayscale(0.9) brightness(0.7)',
                 }}
               >
                 {rankEmblems[colors.theme][idx] ? (
@@ -146,17 +149,29 @@ export default function RanksPage() {
                 style={{
                   backgroundColor: colors.card,
                   borderWidth: '4rpx',
-                  borderColor: isCurrent ? colors.gold : colors.border,
+                  borderColor: isCurrent ? colors.gold : isPassed ? colors.primary : colors.border,
                   opacity: isUnlocked ? 1 : 0.55,
                 }}
               >
                 <View className="flex flex-row items-center justify-between">
                   <Text
                     className="text-lg font-bold"
-                    style={{ color: isCurrent ? colors.gold : colors.text }}
+                    style={{
+                      color: isCurrent ? colors.gold : isPassed ? colors.primary : colors.text,
+                    }}
                   >
                     {name}
                   </Text>
+                  {isPassed ? (
+                    <Text className="text-xs font-bold" style={{ color: colors.primary }}>
+                      ✓ 已完成
+                    </Text>
+                  ) : null}
+                  {isCurrent ? (
+                    <Text className="text-xs font-bold" style={{ color: colors.gold }}>
+                      ▶ 当前
+                    </Text>
+                  ) : null}
                   {rank >= 15 ? <Text>👑</Text> : null}
                   {rank >= 12 && rank < 15 ? <Text>🪽</Text> : null}
                 </View>
