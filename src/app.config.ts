@@ -1,5 +1,6 @@
 export default defineAppConfig({
   lazyCodeLoading: 'requiredComponents',
+  __usePrivacyCheck__: true,
   pages: [
     'pages/index/index',
     'pages/ranks/index',
@@ -43,7 +44,7 @@ export default defineAppConfig({
   window: {
     backgroundTextStyle: 'light',
     navigationBarBackgroundColor: '#0A0A0A',
-    navigationBarTitleText: '特种兵暑假作战',
+    navigationBarTitleText: '寒暑假作业打卡',
     navigationBarTextStyle: 'white',
   },
 });
