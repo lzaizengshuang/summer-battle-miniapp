@@ -87,7 +87,7 @@ export default function RanksPage() {
 
   return (
     <View className="w-full min-h-full overflow-hidden debug-root" style={{ backgroundColor: colors.bg }}>
-      <ScrollView className="w-full min-h-full px-4 py-4 debug-sv" scrollY showScrollbar={false}>
+      <ScrollView className="w-full min-h-full px-4 py-4 box-border debug-sv" scrollY showScrollbar={false}>
       <Text className="text-2xl font-bold mb-4 text-center" style={{ color: colors.text }}>
         {colors.theme === 'prince' ? '军衔阶梯' : '公主成长阶梯'}
       </Text>

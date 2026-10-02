@@ -865,7 +865,7 @@ export default function OnboardingPage() {
 
   return (
     <View className="w-full min-h-full overflow-hidden" style={{ backgroundColor: colors.bg }}>
-      <ScrollView className="w-full min-h-full px-4 py-6" scrollY showScrollbar={false}>
+      <ScrollView className="w-full min-h-full px-4 py-6 box-border" scrollY showScrollbar={false}>
       <View className="flex flex-row items-center justify-center mb-6">
         {[0, 1, 2, 3, 4].map((i) => (
           <View

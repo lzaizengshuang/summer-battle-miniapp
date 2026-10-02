@@ -149,7 +149,7 @@ export default function RecordsPage() {
         />
       ) : null}
       <ScrollView
-        className="w-full min-h-full px-4 py-4"
+        className="w-full min-h-full px-4 py-4 box-border"
         style={{ position: 'relative', zIndex: 1 }}
         scrollY
         showScrollbar={false}

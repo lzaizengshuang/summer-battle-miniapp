@@ -188,7 +188,7 @@ export default function IndexPage() {
       ) : null}
 
       <ScrollView
-        className="relative z-10 w-full min-h-full px-4 py-4"
+        className="relative z-10 w-full min-h-full px-4 py-4 box-border"
         scrollY
         showScrollbar={false}
       >
